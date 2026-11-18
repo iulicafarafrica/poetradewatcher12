@@ -51,8 +51,7 @@ Saved trade items, gear imported from a build, builds, watched listings, search
 history, price history and settings are stored in your browser profile (the
 extension's local storage: chrome.storage.local in Chrome and Edge,
 browser.storage.local in Firefox). Price history keeps the last 50 checks of
-each item. Nothing leaves your device unless you export a backup or, in Chrome,
-turn on sync for your settings. Removing the extension deletes all of it.
+each item. Nothing leaves your device unless you export a backup or turn on sync for your settings. Removing the extension deletes all of it.
 
 What is transmitted, and where
 - www.pathofexile.com: the public trade listings of the page you are viewing;
@@ -94,12 +93,92 @@ Questions or data requests: https://github.com/iulicafarafrica/poetradewatcher12
 > track them, and get Discord or ntfy alerts when a price moves. Works in the
 > side panel or sidebar.
 
-## Description
+## Description (Firefox listing)
 
 ```markdown
-Poe Trade Watcher keeps the trade listings you care about, with every modifier
-intact, and tells you when their price moves.
+Save, watch and organize Path of Exile 1 and 2 trade listings, import your build from Path of Building, and get alerted when a price drops, an item sells or a target price is reached.
 
+Poe Trade Watcher adds one-click actions and alerts directly on the official trade site and keeps your shortlist in the Firefox sidebar. No accounts, no analytics, no ads.
+
+Up to date: ready for Covens, the current Path of Exile 1 league, and for the Path of Exile 2 leagues the trade site lists today. A compatibility update for the Path of Exile 2 major patch on 11 December 2026 is planned.
+
+★ NEW IN 2.9.52
+
+• First Firefox release, built from the same code as the Chrome and Edge versions
+• The interface lives in the Firefox sidebar; the toolbar button opens and closes it
+• "Open in a tab" button in the panel header, for when the sidebar is too narrow
+• The alert tone is played by the sidebar or an open trade tab (Firefox has no background audio document, so there is no sound with both closed)
+• Discord alerts declare no mentions, so a seller name can never ping a channel
+• A restored backup keeps a search address only if it is a real trade link
+
+★ ON THE TRADE PAGE
+
+• Per-row actions: Save, Watch, Send to Discord. Save always goes to Unsorted, a build is assigned on purpose
+• Item meta row: ilvl, quality, seller online status, stash tab and position, fee, price conversions
+• "New" badge for listings under 5 minutes old
+• Copy item, seller blacklist, and optional seller alerts for IGNs you follow
+• Warning when the page shows stale data that disagrees with the trade API
+• Expired search banner with one-click "open a fresh search"
+
+★ SIDEBAR
+
+Five sections: Saved items, Import POB, PoB Builds, Watchers, Tools.
+
+• Saved items: only listings you saved from the trade site. Each card shows how old the seller's listing is ("2h ago", both dates in the tooltip), the price, and Open for details
+• Item panel: price check, Open in Craft of Exile, watch listing, copy item, seller profile, delete
+• Delete all saved items with one button; builds and their imported gear are kept
+
+★ BUILDS AND IMPORT
+
+• Import POB: paste a Path of Building, pobb.in or Mobalytics code, preview the gear, import into a new or existing build
+• PoB Builds: every build with its imported gear, opening the same item panel as saved items
+• Delete a build from next to its name. Imported gear goes with it, saved listings you assigned to it stay in Unsorted
+• Send a whole build to Discord: title, ascendancy and one field per item with base, rarity, ilvl, league and best rolls. Long builds are split across messages
+• Imported gear never mixes with your saved listings
+
+★ WATCHERS AND ALERTS
+
+• Watch a listing and get alerted on price change, sold, or target price. Pause, resume and reorder
+• Status pills: available, price changed, target reached, sold
+• Alert channels: desktop notification, Discord webhook, ntfy push to your phone, optional two-tone sound
+• Discord and ntfy settings sit in the Watchers tab and stay in sync with Settings. Save and Test right there
+• Alert text: "Watched item price changed" with Name - Base: old price -> new price
+• Seller alerts for sellers you follow, and they respect their on/off switch
+
+★ CRAFT OF EXILE
+
+• "Open in Craft of Exile": a pre-filled import, with a one-time explainer of what the site is and what is not imported
+• Works in PoE 1 and PoE 2
+• Two-number modifiers pick the tier that holds both numbers ("Adds 32 to 68 Physical Damage" picks the 30-40 / 63-73 tier)
+• Limits: socketed runes are not imported, uniques import as their base, and hybrid affixes printed on two lines can be split
+
+★ SEARCH QUALITY
+
+• Every search the extension creates asks for "Instant Buyout and In Person"
+• Searches open in your league, never silently in Standard
+• Imports keep every modifier line: crafted, desecrated, fractured and more
+• Build-defining stats are required, the rest match all but one. Runes are never searched
+
+★ BACKUP AND SYNC
+
+• Backup and restore to a JSON file: items, builds, watchers, history and settings. Secrets (webhook, ntfy topic) are stripped from backups
+• Optional sync of settings, folders and bookmarks through your browser account (Chrome Sync in Chrome and Edge, Firefox Sync in Firefox), with a status line showing when it last pushed and how much of the quota is used. Secrets are never synced
+
+★ PRIVACY AND YOUR DATA
+
+• No servers, no accounts, no analytics, no telemetry, no trackers
+• Everything is stored locally in your browser profile; removing the extension deletes it
+• Network goes only to the official trade API and its image CDN, poe.ninja, Craft of Exile (after the browser asks for permission), the build page you ask it to read, and the Discord webhook or ntfy topic you configure
+
+★ HOW TO USE
+Open pathofexile.com/trade2 (or the PoE 1 trade site) and run a search
+Press Save, Watch or Send to Discord on any result
+Click the toolbar button to open the sidebar and manage items, builds and watchers
+Add a target price and an alert channel to get notified
+Optional: paste a build in Import POB to bring in your gear
+
+Unofficial, fan-made tool. Not affiliated with or endorsed by Grinding Gear Games.
+```
 ## What it does
 
 - **Save a listing in one click.** The item is stored with all its modifiers,
