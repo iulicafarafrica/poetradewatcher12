@@ -122,6 +122,38 @@ function firefoxManifest(chrome) {
   return manifest;
 }
 
+/* The Firefox package must not contain a single Chrome-only API call. The AMO
+   validator reports those as "not supported by Firefox" even when they sit
+   behind a runtime guard, so lines marked "chrome-only" are dropped here and a
+   line marked "chrome-only:" replaces itself with the text after the colon. */
+function stripChromeOnly(file) {
+  const lines = fs.readFileSync(file, 'utf8').split(/\r?\n/);
+  const kept = [];
+  let dropped = 0;
+  lines.forEach((line) => {
+    const replacement = /\/\/ chrome-only:\s?(.*)$/.exec(line);
+    if (replacement) {
+      kept.push(replacement[1]);
+      return;
+    }
+    if (/\/\/ chrome-only\s*$/.test(line)) {
+      dropped += 1;
+      return;
+    }
+    kept.push(line);
+  });
+  const result = kept.join('\n');
+  const survivor = /\bchrome\.(sidePanel|offscreen)\b/.exec(result);
+  if (survivor) {
+    throw new Error(
+      'A Chrome-only API survived the Firefox build in ' + path.basename(file) +
+      ': ' + survivor[0],
+    );
+  }
+  fs.writeFileSync(file, result);
+  return dropped;
+}
+
 function main() {
   const chrome = readJson(path.join(SRC, 'manifest.json'));
   if (!/^PoeTradeFirefox$/.test(path.basename(OUT))) {
@@ -137,6 +169,8 @@ function main() {
   });
   DIRS.forEach((dir) => copyDir(path.join(SRC, dir), path.join(OUT, dir)));
 
+  const dropped = stripChromeOnly(path.join(OUT, 'background.js'));
+
   const manifest = firefoxManifest(chrome);
   fs.writeFileSync(path.join(OUT, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n');
 
@@ -151,6 +185,7 @@ function main() {
   console.log('  optional: ' + (manifest.optional_permissions || []).join(', '));
   console.log('  panel: sidebar_action -> ' + manifest.sidebar_action.default_panel);
   console.log('  background: ' + manifest.background.scripts.join(', '));
+  console.log('  chrome-only lines removed from background.js: ' + dropped);
 }
 
 main();

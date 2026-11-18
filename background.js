@@ -53,11 +53,14 @@ const SEARCH_STATUS_ANY = (globalThis.PTC_GAMES && globalThis.PTC_GAMES.TRADE_ST
 
 /* Chrome opens the side panel from the toolbar button. Firefox has no side
    panel API, so the same click toggles the sidebar instead; the two browsers
-   share one source and only this branch differs. */
-const HAS_SIDE_PANEL = !!(chrome.sidePanel && chrome.sidePanel.setPanelBehavior);
-try {
-  if (HAS_SIDE_PANEL) chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
-} catch (_) {}
+   share one source and only this branch differs. Every line marked
+   "chrome-only" is dropped when the Firefox package is built, so that package
+   contains no Chrome API call at all. */
+const HAS_SIDE_PANEL = !!(chrome.sidePanel && chrome.sidePanel.setPanelBehavior); // chrome-only
+// chrome-only: const HAS_SIDE_PANEL = false;
+try { // chrome-only
+  if (HAS_SIDE_PANEL) chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true }); // chrome-only
+} catch (_) {} // chrome-only
 if (!HAS_SIDE_PANEL && chrome.action && chrome.action.onClicked && chrome.sidebarAction) {
   chrome.action.onClicked.addListener(() => {
     /* Firefox reports the click instead of opening the sidebar itself, so this
@@ -3310,20 +3313,20 @@ async function playWatchSound() {
   if (Date.now() - lastSoundAt < SOUND_COOLDOWN) return;
   lastSoundAt = Date.now();
   try {
-    if (chrome.offscreen && chrome.offscreen.createDocument) {
-      const contexts = chrome.runtime.getContexts
-        ? await chrome.runtime.getContexts({ contextTypes: ['OFFSCREEN_DOCUMENT'] })
-        : [];
-      if (!contexts || !contexts.length) {
-        await chrome.offscreen.createDocument({
-          url: 'offscreen.html',
-          reasons: ['AUDIO_PLAYBACK'],
-          justification: 'Play a short alert when a watched price changes.',
-        });
-      }
-      await chrome.runtime.sendMessage({ target: 'ptc-offscreen', type: 'ptc:sound' });
-      return;
-    }
+    if (chrome.offscreen && chrome.offscreen.createDocument) { // chrome-only
+      const contexts = chrome.runtime.getContexts // chrome-only
+        ? await chrome.runtime.getContexts({ contextTypes: ['OFFSCREEN_DOCUMENT'] }) // chrome-only
+        : []; // chrome-only
+      if (!contexts || !contexts.length) { // chrome-only
+        await chrome.offscreen.createDocument({ // chrome-only
+          url: 'offscreen.html', // chrome-only
+          reasons: ['AUDIO_PLAYBACK'], // chrome-only
+          justification: 'Play a short alert when a watched price changes.', // chrome-only
+        }); // chrome-only
+      } // chrome-only
+      await chrome.runtime.sendMessage({ target: 'ptc-offscreen', type: 'ptc:sound' }); // chrome-only
+      return; // chrome-only
+    } // chrome-only
     /* Firefox has no offscreen document: the sidebar, or a trade tab that is
        open, plays the tone instead. With neither open there is no sound. */
     await chrome.runtime.sendMessage({ target: 'ptc-sound-page', type: 'ptc:sound' });

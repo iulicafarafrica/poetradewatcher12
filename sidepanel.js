@@ -2931,12 +2931,12 @@ function fillSettingsForm() {
   form.syncEnabled.checked = !!state.settings.syncEnabled;
 }
 
-/* What Chrome Sync actually holds for this extension, read from its own meta. */
+/* What browser sync actually holds for this extension, read from its own meta. */
 async function refreshSyncStatus() {
   const node = $('syncStatus');
   if (!node) return;
   if (!state.settings.syncEnabled) {
-    node.textContent = 'Chrome Sync is off.';
+    node.textContent = 'Browser sync is off.';
     return;
   }
   try {
@@ -2950,7 +2950,7 @@ async function refreshSyncStatus() {
       + (meta.chunks === 1 ? '1 chunk' : meta.chunks + ' chunks') + ' · '
       + Math.round((Number(meta.size) || 0) / 1024) + ' KB of 100 KB.';
   } catch (error) {
-    node.textContent = 'Chrome Sync is not available.';
+    node.textContent = 'Browser sync is not available.';
   }
 }
 
@@ -3086,7 +3086,7 @@ async function downloadBackup() {
 
 async function pushSync() {
   const response = await send('ptc:sync:push');
-  toast(response.ok ? 'Bookmarks pushed to Chrome Sync.' : (response.error || 'Sync push failed.'), !response.ok);
+  toast(response.ok ? 'Bookmarks pushed to your browser account.' : (response.error || 'Sync push failed.'), !response.ok);
   refreshSyncStatus();
 }
 

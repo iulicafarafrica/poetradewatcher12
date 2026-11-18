@@ -1,5 +1,17 @@
 # Poe Trade Watcher — Changelog
 
+## 2.9.53
+
+The Firefox package stops carrying code it cannot run, so the AMO validation report is clean.
+
+### Changed
+- **The Firefox build contains no Chrome-only API call.** Lines marked `chrome-only` in the shared source are dropped by `tools/build-firefox.js`, which also fails the build if `chrome.sidePanel` or `chrome.offscreen` survives. The AMO validator no longer reports the four "not implemented by Firefox" warnings. The Chrome/Edge package is unchanged.
+- **Sync is described as the browser's own**: "Sync settings with your browser account", and the status line says "Browser sync" instead of "Chrome Sync". The same `chrome.storage.sync` call works in both browsers; only the wording was Chrome-specific.
+- **The privacy policy matches that**: the sync section names Chrome Sync and Firefox Sync, and no longer claims the Firefox version has no sync.
+
+### Tests
+- 202 (importer/schema/CoE/PoB limits), 70 (worker), 27 (search rules). Firefox build: `web-ext lint` 0 errors, 0 warnings, 0 notices.
+
 ## 2.9.52
 
 The same extension in Firefox, built from the same source; the panel is the browser sidebar there, and one save bug is now impossible to hit unnoticed.
