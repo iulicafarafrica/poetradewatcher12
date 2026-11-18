@@ -1,0 +1,54 @@
+{
+  "manifest_version": 3,
+  "name": "Poe Trade Watcher",
+  "description": "Save Path of Exile 1 and 2 trade items, track prices, build collections, and get Discord or ntfy alerts.",
+  "version": "2.9.51",
+  "author": "Poe Trade Watcher",
+  "minimum_chrome_version": "116",
+  "permissions": ["storage", "sidePanel", "alarms", "notifications", "unlimitedStorage", "scripting", "offscreen"],
+  "host_permissions": [
+    "https://www.pathofexile.com/*",
+    "https://poe.ninja/*"
+  ],
+  "optional_host_permissions": [
+    "https://beta.craftofexile.com/*",
+    "https://mobalytics.gg/*",
+    "https://*.mobalytics.gg/*",
+    "https://discord.com/*",
+    "https://discordapp.com/*",
+    "https://ntfy.sh/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_title": "Poe Trade Watcher",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "side_panel": {
+    "default_path": "sidepanel.html"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.pathofexile.com/trade2/*",
+        "https://www.pathofexile.com/trade/*"
+      ],
+      "js": ["ptc-games.js", "ptc-poe1.js", "ptc-poe2.js", "ptc-settings.js", "item-utils.js", "content.js"],
+      "css": ["content.css"],
+      "run_at": "document_idle"
+    }
+  ]
+}
+

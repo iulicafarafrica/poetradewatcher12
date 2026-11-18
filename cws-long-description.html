@@ -1,0 +1,73 @@
+<h2>Poe Trade Watcher</h2>
+<p>A productivity companion for the <strong>Path of Exile 1 and Path of Exile 2</strong> trade sites. It works directly on top of the official search results: adds actions, insights and alerts to every item, keeps a personal collection with price history, imports a whole build from Path of Building, pobb.in or Mobalytics, and pings you (desktop, Discord or ntfy) when a watched item sells, drops in price or hits your target. A game switcher in the side panel keeps the two games apart, each with its own items, builds, watchers and league. All data stays on your machine — no accounts, no analytics, no ads.</p>
+
+<p><strong>Up to date:</strong> ready for <strong>Covens</strong>, the current Path of Exile 1 league, and for the Path of Exile 2 leagues the trade site lists today. A compatibility update for the Path of Exile 2 major patch on <strong>11 December 2026</strong> is planned.</p>
+
+<h3>One extension, both games</h3>
+<ul>
+  <li><strong>Game switcher</strong> in the side panel header — pick <strong>PoE 1</strong> or <strong>PoE 2</strong>. Everything you save, watch, build or search stays in its own game, so the two collections never mix.</li>
+  <li><strong>A league selector per game</strong>, filled from the trade site’s own league list. The current challenge league is picked automatically — for PoE 1 that means the permanent modes (Standard, Hardcore, Ruthless) are never mistaken for it — and you can always set one by hand.</li>
+  <li><strong>Prices per game</strong> from poe.ninja, in the currency each game actually uses (divine orbs for PoE 2, chaos orbs for PoE 1).</li>
+  <li><strong>Craft of Exile</strong> for both games, using each game’s own data.</li>
+  <li><strong>Path of Building</strong> builds for both games — paste a PoE 1 or a PoE 2 build code and the extension reads the right one.</li>
+</ul>
+
+<h3>On the trade page</h3>
+<p>Every search result row gets a compact action bar and live insights, right on the official page:</p>
+<ul>
+  <li><strong>Save and Watch</strong> each listing with one click — straight from the search results.</li>
+  <li><strong>Send to Discord</strong> - one click posts the item to your webhook, and copies the message when no webhook is set.</li>
+  <li><strong>Estimated value badge</strong> (price per quality, in chaos orbs — lower is better) so the best deals stand out at a glance, plus an optional reorder of the whole page by value score. The value uses live poe.ninja rates, so it stays correct when the currency ratios move between leagues.</li>
+  <li><strong>“new” badge</strong> for items listed in the last 5 minutes.</li>
+  <li><strong>Item meta row</strong>: ilvl, quality, verified seller, seller online status, stash tab and position, and fee — without opening the popup.</li>
+  <li><strong>Seller IGN</strong> shown on every row (can be hidden).</li>
+  <li><strong>Price conversions</strong> to Divine/Exalted equivalents using live poe.ninja rates.</li>
+  <li><strong>Filter box</strong> — filter the visible results with a fuzzy search and <strong>highlight the matching stats</strong> inside the rows (optional).</li>
+  <li><strong>Mod colour legend</strong> — the modifiers are colour-coded on the page and in the item popup, with an optional “crafted / fractured / veiled / enchant” label next to each P/S tier.</li>
+  <li><strong>API/DOM mismatch warning</strong> when the page shows stale data that disagrees with the trade API.</li>
+  <li><strong>Seller blacklist</strong> — hide rows from sellers you never want to deal with, and optional <strong>seller alerts</strong> when an IGN you follow lists something.</li>
+  <li><strong>Expired search banner</strong> with a one-click “open a fresh search” when results are stale.</li>
+</ul>
+
+<h3>Side panel: your collection</h3>
+<p>A full side panel lives next to the trade page, with:</p>
+<ul>
+  <li><strong>Saved items</strong> — everything you saved, with price, seller, league and a <strong>price history chart</strong> (trend direction, per-point values, mixed-currency aware). Includes a link back to the listing, wiki links and a saved-item viewer.</li>
+  <li><strong>Fair price and bait warnings</strong> — the extension keeps a local price index from the listings you have seen, so it can tell you when a listing is far below the market (often a price-mining bait) or far above it.</li>
+  <li><strong>Crafting cost</strong> — an estimate of what it would cost to craft an item yourself, using the Craft of Exile affix tiers and live currency prices, so you can tell whether buying is cheaper than crafting.</li>
+  <li><strong>Import POB</strong> — paste a build code from Path of Building, pobb.in or Mobalytics (“Share your Build”), preview the equipped gear and import it into a new or existing build. Flasks and gems are skipped.</li>
+  <li><strong>PoB Builds</strong> — the builds you imported, each with its gear, kept apart from the listings you save on the trade site. Any item opens the full view with its own trade search and “Open in Craft of Exile”, and a build can be sent to Discord as a formatted message.</li>
+  <li><strong>Watchers</strong> — keep watching items you want to buy: the extension re-checks the trade API at your chosen interval and fires alerts when the price changes, the item sells or your target price is reached.</li>
+  <li><strong>Tools</strong> — shortcuts to the author’s other PoE utilities.</li>
+  <li><strong>Settings</strong> — theme (six colour schemes plus “match system”), text size, league (detected automatically or set by hand, with a Hardcore toggle), price display, display toggles, blacklist and seller alerts, watcher interval and notification channels.</li>
+</ul>
+
+<h3>Notifications and alerts</h3>
+<ul>
+  <li><strong>Chrome desktop notifications</strong> for sales, price changes, target prices and new listings in watched searches (toggle in Settings).</li>
+  <li><strong>Discord webhook</strong> — get sold / price / target alerts posted to your channel (URL stays in your local settings).</li>
+  <li><strong>ntfy</strong> — the same alerts as push notifications on your phone, via topic or full URL.</li>
+  <li><strong>Seller alerts</strong> — a local toast (and notification) when a seller you follow lists an item.</li>
+</ul>
+
+<h3>Craft of Exile integration</h3>
+<ul>
+  <li><strong>“Open in Craft of Exile”</strong> — opens Craft of Exile with the item already loaded: base, quality, item level and its modifiers, in the site’s own item data. Both games are supported, and the site asks for access to its data once.</li>
+</ul>
+
+<h3>Price tracking</h3>
+<ul>
+  <li>Per-item <strong>price history</strong> with a built-in SVG chart — no external chart libraries, instant rendering.</li>
+  <li>Live <strong>Divine/Exalted ratios</strong> from poe.ninja for conversions and value scoring.</li>
+  <li><strong>Value score</strong> (price per quality) for ranking gear deals.</li>
+</ul>
+
+<h3>Privacy and your data</h3>
+<ul>
+  <li><strong>Everything is stored locally</strong> in your browser profile (chrome.storage). There are no servers, no accounts, no telemetry and no third-party trackers. Requests only go to the Path of Exile trade API and its image CDN, poe.ninja (currency rates), Craft of Exile (public data files, only after you allow it) and the build page you explicitly ask it to read; alerts go only to the Discord webhook or ntfy topic you configure.</li>
+  <li><strong>Backup and restore</strong> — export your items, watchers, builds, search history and settings to a JSON file any time, and import them on any machine.</li>
+  <li><strong>Optional Chrome Sync</strong> of your settings (and legacy bookmark folders from older versions), if you want them to follow your Google account. Saved items, builds and watchers are never synced.</li>
+  <li>Your Discord webhook and ntfy topic are never sent anywhere except to the services themselves.</li>
+</ul>
+
+<p><em>Poe Trade Watcher is an unofficial, fan-made tool. It is not affiliated with or endorsed by Grinding Gear Games.</em></p>

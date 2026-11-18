@@ -1,0 +1,15 @@
+# Local artefacts — never committed
+
+# Packaged builds (uploaded to the Chrome Web Store, kept out of the repo)
+*.zip
+
+# Local backups of earlier versions
+backup/
+
+# Marketing images, kept outside the repository
+poze promo/
+
+# OS noise
+Thumbs.db
+desktop.ini
+.DS_Store

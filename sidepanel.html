@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en" data-theme="graphite">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Poe Trade Watcher</title>
+  <link rel="stylesheet" href="themes.css">
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="wordmark-lockup">
+        <svg class="wordmark-mark" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 2.4 20 5.3v6.4c0 4.5-3.3 8.3-8 9.9-4.7-1.6-8-5.4-8-9.9V5.3L12 2.4Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M12 7.6 15.4 12 12 16.4 8.6 12 12 7.6Z" fill="#e8873f"/>
+          <path d="M12 4.2v2.1M12 17.7v2.1" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        <h1 class="wordmark">
+          <span class="wordmark-main">Poe</span>
+          <span class="wordmark-sub">Trade Watcher</span>
+        </h1>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button id="themeBtn" class="icon-btn theme-btn" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 0 18c.9 0 1.6-.7 1.6-1.6 0-.4-.2-.8-.4-1.1-.3-.3-.4-.7-.4-1.1 0-.9.7-1.6 1.6-1.6H16a5 5 0 0 0 5-5c0-3.9-4-7-9-7Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="7.5" cy="11" r="1.1" fill="currentColor"/><circle cx="10.5" cy="7.5" r="1.1" fill="currentColor"/><circle cx="15" cy="8.5" r="1.1" fill="currentColor"/></svg>
+        <span class="theme-dot" aria-hidden="true"></span>
+      </button>
+      <button id="openSettingsBtn" class="icon-btn" type="button" title="Settings" aria-label="Open settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h9M17 7h3M4 17h3M11 17h9" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><circle cx="15" cy="7" r="2.3" fill="none" stroke="currentColor" stroke-width="1.7"/><circle cx="9" cy="17" r="2.3" fill="none" stroke="currentColor" stroke-width="1.7"/></svg>
+      </button>
+      <button id="coffeeBtn" class="support-btn" type="button" title="Buy me a coffee (Ko-fi)" aria-label="Buy me a coffee on Ko-fi">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h12v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V9Z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M16 10.5h1.5a2.5 2.5 0 0 1 0 5H16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/><path d="M8 3.5c-.8 1.2.8 1.8 0 3M12 3.5c-.8 1.2.8 1.8 0 3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        <span class="support-text">Buy me a coffee</span>
+      </button>
+      <input type="file" id="restoreFile" accept="application/json,.json" hidden>
+      <div id="themePopover" class="theme-popover" role="dialog" aria-label="Theme" hidden>
+        <div class="theme-popover-head">
+          <h2>Appearance</h2>
+          <button id="themeClose" type="button">Close</button>
+        </div>
+        <div id="themeGrid" class="theme-grid"></div>
+      </div>
+    </div>
+  </header>
+
+  <div class="context-bar">
+    <div class="game-switch" id="gameSwitch" role="group" aria-label="Game">
+      <button type="button" class="game-option" data-game="poe2">PoE 2</button>
+      <button type="button" class="game-option" data-game="poe1">PoE 1</button>
+    </div>
+    <button id="leagueQuickBtn" class="league-pill" type="button" aria-haspopup="listbox" aria-expanded="false" title="League used for searches of this game">
+      <span id="leagueQuickLabel">Auto league</span>
+      <svg class="league-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <span id="countLabel" class="context-count">0 items saved</span>
+    <div id="leaguePopover" class="league-popover" role="listbox" aria-label="League" hidden></div>
+  </div>
+
+  <nav class="tabs" id="tabs" aria-label="Sections">
+    <button class="tab active" type="button" id="tab-items" data-tab="items">Saved items</button>
+    <button class="tab" type="button" id="tab-pob" data-tab="pob">Import POB</button>
+    <button class="tab" type="button" id="tab-builds" data-tab="builds">PoB Builds</button>
+    <button class="tab" type="button" id="tab-alerts" data-tab="alerts">Watchers <span id="alertsBadge" class="tab-badge hidden">0</span></button>
+    <button class="tab" type="button" id="tab-tools" data-tab="tools">Tools</button>
+  </nav>
+
+  <div id="tradeBlockNotice" class="trade-block-notice hidden" role="status"></div>
+
+  <section id="view-items" aria-labelledby="tab-items" class="view">
+    <section class="controls" id="controls" aria-label="Filters">
+      <div class="search-row">
+        <input id="search" type="search" placeholder="Search name, mod, seller..." autocomplete="off" spellcheck="false" aria-label="Search saved items">
+        <select id="sort" title="Sort" aria-label="Sort items">
+          <option value="new">Newest</option>
+          <option value="old">Oldest</option>
+          <option value="price">Price (high &rarr; low)</option>
+          <option value="value">Value (best first)</option>
+          <option value="name">Name (A-Z)</option>
+        </select>
+      </div>
+      <div class="chips-row">
+        <div class="chips" id="chips"></div>
+        <button id="clearAllBtn" class="mini-btn danger icon-only" type="button" title="Delete all saved items" aria-label="Delete all saved items">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 7h14M9 7V5h6v2m-8 0 1 13h8l1-13" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <div id="list" class="list"></div>
+
+    <div id="empty" class="empty hidden">
+      <img src="icons/icon128.png" alt="">
+      <h2>No items saved yet</h2>
+      <p>Open <strong>pathofexile.com/trade2</strong>, search for an item and press <strong>Save</strong> on the result you like.</p>
+      <p class="muted">Everything is saved: all mods, runes, icon, price, seller and search link.</p>
+    </div>
+
+  </section>
+
+  <section id="view-builds" aria-labelledby="tab-builds" class="view hidden">
+    <div class="builds-bar">
+      <button id="newCollectionBtn" class="mini-btn primary" type="button" title="Create a new build">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        New build
+      </button>
+      <button id="manageCollectionsBtn" class="mini-btn" type="button" title="Rename, delete and assign items">Manage</button>
+    </div>
+    <div id="buildList" class="build-list"></div>
+    <div id="buildEmpty" class="empty small hidden">
+      <h2>No imported builds yet</h2>
+      <p>Open <strong>Import POB</strong>, paste a build code and import its gear. Imported items live here, apart from the items saved on the trade site.</p>
+    </div>
+  </section>
+
+  <section id="detail" class="detail hidden">
+    <button id="backBtn" class="back-btn" type="button">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <span id="backLabel">Back</span>
+    </button>
+    <div id="detailBody"></div>
+  </section>
+
+  <section id="view-alerts" aria-labelledby="tab-alerts" class="view hidden">
+    <div class="alerts-bar">
+      <button id="checkWatchersBtn" class="mini-btn primary" type="button">Check now</button>
+      <label class="mini-label">Check every
+        <select id="watcherInterval" class="mini-select">
+          <option value="1">1 min</option>
+          <option value="2">2 min</option>
+          <option value="5">5 min</option>
+          <option value="10">10 min</option>
+          <option value="15">15 min</option>
+          <option value="30">30 min</option>
+          <option value="60">60 min</option>
+        </select>
+      </label>
+    </div>
+
+    <section class="alert-block">
+      <div class="alert-head">
+        <h3>Watched listings</h3>
+        <span id="watcherCount" class="alert-count"></span>
+      </div>
+      <p class="hint alert-sub" id="watcherHint"></p>
+      <div id="watcherList" class="watcher-list"></div>
+      <div id="watcherEmpty" class="empty small hidden">
+        <h2>No watched listings</h2>
+        <p>Press <strong>Watch</strong> on a trade result: its price and availability are checked in the background.</p>
+      </div>
+    </section>
+
+    <details class="alert-block alert-channels-block" id="alertChannelsBlock">
+      <summary class="alert-head channels-summary">
+        <h3>Alert channels</h3>
+        <span class="alert-count" id="alertChannelsSummary">Not set</span>
+        <svg class="channels-chevron" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </summary>
+      <form id="alertChannelsForm" class="alert-channels">
+        <div class="channels-grid">
+          <label class="field">Discord webhook
+            <input name="discordWebhook" type="url" spellcheck="false" placeholder="https://discord.com/api/webhooks/...">
+          </label>
+          <label class="field">ntfy topic or URL
+            <input name="ntfyUrl" type="text" spellcheck="false" placeholder="https://ntfy.sh/my-poe-alerts">
+          </label>
+        </div>
+        <p class="hint">Any HTTPS ntfy server works, not only ntfy.sh; a self-hosted one must send CORS headers. On your phone: install the <strong>ntfy</strong> app (Android or iOS) and subscribe to the same topic. A short topic such as <code>my-poe-alerts</code> works on the public server.</p>
+        <div class="button-row">
+          <button class="primary-btn" type="submit">Save</button>
+          <button id="watcherTestBtn" class="mini-btn" type="button">Test alerts</button>
+          <span class="hint" id="alertChannelsStatus"></span>
+        </div>
+      </form>
+    </details>
+
+  </section>
+
+  <section id="view-pob" aria-labelledby="tab-pob" class="view hidden">
+    <div class="pob-form">
+      <label class="field">
+        <span>Share your Build</span>
+        <textarea id="pobCode" rows="6" spellcheck="false" placeholder="Paste a build code from Mobalytics (Share your Build), pobb.in or Path of Building 2…"></textarea>
+      </label>
+      <p class="hint">Copy the code next to your pobb.in link (the “Copy” button) and paste it here. Only the equipped gear is imported — flasks and gems are skipped.</p>
+      <div class="button-row">
+        <button id="pobParseBtn" class="primary-btn" type="button">Read build code</button>
+        <button id="pobClearBtn" class="ghost-btn" type="button" disabled title="Clear the pasted code and the parsed gear list">Clear list</button>
+      </div>
+    </div>
+
+    <div id="pobResult" class="pob-result hidden">
+      <div id="pobBuildHead" class="pob-build-head"></div>
+      <div class="pob-import-row">
+        <label class="field">Import into
+          <select id="pobTargetSelect"></select>
+        </label>
+        <label class="field pob-newname" id="pobNewNameWrap">
+          <span>New build name</span>
+          <input type="text" id="pobNewName" class="modal-input" maxlength="80">
+        </label>
+        <button id="pobImportBtn" class="primary-btn" type="button">Import gear</button>
+      </div>
+      <div id="pobList" class="pob-list"></div>
+    </div>
+  </section>
+
+
+  <section id="view-tools" aria-labelledby="tab-tools" class="view hidden">
+    <div class="tools-head">
+      <h2>Check out my other tools for PoE2</h2>
+      <p class="muted">Free &amp; open source, on GitHub.</p>
+    </div>
+    <div class="tool-card" role="link" tabindex="0" aria-label="Path of Expedition on GitHub" data-url="https://github.com/iulicafarafrica/PathOfExpedition2">
+      <div class="tool-card-body">
+        <div class="tool-name">Path of Expedition</div>
+        <div class="tool-desc">PoE2 Expedition price checker &amp; planner. Reads the in-game panel with OCR, shows live poe.ninja prices, rune recipes and an Expedition guide. 10 UI languages.</div>
+      </div>
+      <span class="mini-btn tool-open">Open on GitHub</span>
+    </div>
+    <div class="tool-card" role="link" tabindex="0" aria-label="Chat Alert for Path of Exile 1 and 2 on GitHub" data-url="https://github.com/iulicafarafrica/Poe2ChatAlert">
+      <div class="tool-card-body">
+        <div class="tool-name">Chat Alert — for Path of Exile 1 &amp; 2</div>
+        <div class="tool-desc">Real-time chat alerts for Path of Exile 1 and Path of Exile 2: leech words, trade items and price drops, with Discord and ntfy push notifications. Reads the chat of whichever game you are playing.</div>
+      </div>
+      <span class="mini-btn tool-open">Open on GitHub</span>
+    </div>
+  </section>
+
+  <section id="view-settings" aria-label="Settings" class="view hidden">
+    <form id="settingsForm" class="settings-form">
+      <fieldset>
+        <legend>General</legend>
+        <label class="field">Theme
+          <select name="theme" id="themeSelect"></select>
+          <span class="muted">Saved with this form and remembered on this device.</span>
+        </label>
+        <label class="field">Text size
+          <select name="textSize">
+            <option value="small">Small</option>
+            <option value="medium">Medium</option>
+            <option value="large">Large</option>
+            <option value="xlarge">Extra large</option>
+          </select>
+        </label>
+        <label class="field">League
+          <span class="league-row">
+            <select name="league" id="leagueSelect">
+              <option value="">Detect automatically</option>
+            </select>
+            <button type="button" id="refreshLeaguesBtn" class="mini-btn" title="Refresh the league list from the trade site">Refresh</button>
+          </span>
+          <span class="muted" id="leagueHint">The trade site publishes the league list, so the extension can keep up with new leagues.</span>
+        </label>
+        <label class="check-field"><input type="checkbox" name="hardcore"> Hardcore league</label>
+        <label class="field">Fallback league
+          <input type="text" name="fallbackLeague" maxlength="80" placeholder="e.g. Standard">
+          <span class="muted">For the game selected in the header, used when no league is detected.</span>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Results</legend>
+        <label class="field">Price display
+          <select name="priceDisplay">
+            <option value="divine-exalted">Divine + Exalted</option>
+            <option value="divine">Divine</option>
+            <option value="exalted">Exalted</option>
+            <option value="chaos">Chaos</option>
+          </select>
+        </label>
+        <label class="check-field"><input type="checkbox" name="showConversions"> Show price conversions (poe.ninja)</label>
+        <label class="check-field"><input type="checkbox" name="showIgn"> Show seller IGN</label>
+        <label class="check-field"><input type="checkbox" name="highlightStats"> Highlight matched stats</label>
+
+        <label class="check-field"><input type="checkbox" name="showWikiLinks"> Wiki links</label>
+        <label class="check-field"><input type="checkbox" name="coeIncludeDesecrated"> Include desecrated mods in Craft of Exile copy</label>
+        <label class="check-field"><input type="checkbox" name="modDomainLabels"> Show mod type next to P/S tiers on the trade page (crafted / fractured / desecrated)</label>
+        <label class="check-field"><input type="checkbox" name="searchFilterEnabled"> Show a filter box on the trade page</label>
+        <label class="check-field"><input type="checkbox" name="priceIndexEnabled"> Show the fair price of a saved item (built from the listings you saw)</label>
+        <label class="check-field"><input type="checkbox" name="scamDetectionEnabled"> Flag suspiciously cheap listings (price mining)</label>
+        <label class="check-field"><input type="checkbox" name="blacklistEnabled"> Hide blacklisted sellers</label>
+        <label class="field">Blacklist (one seller per line)
+          <textarea name="blacklist" rows="4" spellcheck="false" placeholder="SellerName&#10;AnotherSeller"></textarea>
+        </label>
+        <label class="check-field"><input type="checkbox" name="valueSortPage"> Reorder page results by value score</label>
+        <label class="check-field"><input type="checkbox" name="sellerAlertsEnabled"> Notify me about the sellers listed below</label>
+        <label class="field">Seller alerts (IGN, one per line)
+          <textarea name="sellerAlerts" rows="3" spellcheck="false" placeholder="WhitelistedSeller#1234"></textarea>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Watchers</legend>
+        <p class="hint">Watched searches re-run their query and are checked at least every 15 minutes, whatever this interval is, because each check is a search on the trade site.</p>
+        <label class="field">Check interval
+          <select name="watcherInterval">
+            <option value="1">1 minute</option>
+            <option value="2">2 minutes</option>
+            <option value="5">5 minutes</option>
+            <option value="10">10 minutes</option>
+            <option value="15">15 minutes</option>
+            <option value="30">30 minutes</option>
+            <option value="60">60 minutes</option>
+          </select>
+        </label>
+        <label class="check-field"><input type="checkbox" name="watcherNotifications"> Desktop notifications for sales and price changes</label>
+        <label class="check-field"><input type="checkbox" name="watcherSound"> Play a sound when a watched price changes</label>
+        <label class="field">Discord webhook (optional, receives sold / price / target alerts)
+          <input name="discordWebhook" type="url" spellcheck="false" placeholder="https://discord.com/api/webhooks/...">
+          <span class="muted">Chrome asks for access to discord.com the first time you save or test a webhook.</span>
+        </label>
+        <label class="field">ntfy topic or URL (optional, same alerts as the webhook)
+          <input name="ntfyUrl" type="text" spellcheck="false" placeholder="https://ntfy.sh/my-poe-alerts">
+          <span class="muted">Alerts contain the item name, price and seller name, so use a private or random topic.</span>
+        </label>
+        <div class="button-row">
+          <button id="testWebhookBtn" class="mini-btn" type="button">Test alerts</button>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Data and privacy</legend>
+        <p class="hint">Saved items and settings stay in your browser. Alerts only leave your device if you configure a Discord webhook or ntfy topic, and only when you enable watcher notifications.</p>
+        <div class="button-row">
+          <button id="privacyBtn" class="mini-btn" type="button">Privacy policy</button>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend>Sync and data</legend>
+        <label class="check-field"><input type="checkbox" name="syncEnabled"> Sync settings with Chrome Sync</label>
+        <div class="button-row">
+          <button id="pushSyncBtn" class="mini-btn" type="button">Push sync</button>
+          <button id="pullSyncBtn" class="mini-btn" type="button">Pull sync</button>
+          <button id="backupBtn" class="mini-btn" type="button">Download backup</button>
+          <button id="restoreBtn" class="mini-btn" type="button">Restore backup</button>
+        </div>
+        <p class="hint">Backups contain items, builds, watchers, history and settings.</p>
+        <p class="hint" id="syncStatus"></p>
+        <div class="button-row">
+          <button id="clearBtn" class="mini-btn danger" type="button" title="Delete every saved item">Delete all saved items</button>
+        </div>
+      </fieldset>
+
+      <div class="settings-actions">
+        <button type="submit" class="primary-btn">Save settings</button>
+        <span id="settingsStatus" class="muted"></span>
+      </div>
+    </form>
+  </section>
+
+  <div id="modal" class="modal hidden">
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="modal-head">
+        <h2 id="modalTitle">Builds</h2>
+        <button id="modalClose" class="icon-btn" type="button" title="Close" aria-label="Close dialog">&times;</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="ptc-settings.js"></script>
+  <script src="ptc-games.js"></script>
+  <script src="ptc-poe1.js"></script>
+  <script src="ptc-poe2.js"></script>
+  <script src="ptc-features.js"></script>
+  <script src="item-utils.js"></script>
+  <script src="ascendancies.js"></script>
+  <script src="pako.min.js"></script>
+  <script src="pob-import.js"></script>
+  <script src="sidepanel.js"></script>
+</body>
+</html>
+
+
+

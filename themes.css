@@ -1,0 +1,720 @@
+/* ==========================================================================
+   Poe Trade Watcher — Design tokens & themes
+   --------------------------------------------------------------------------
+   Every surface, border, text colour and accent used by the extension is
+   defined here as a CSS custom property. A theme is nothing more than a
+   different set of values for those tokens, so switching themes is instant
+   and never requires re-rendering anything.
+
+   Theming works on <html data-theme="…">. The `auto` theme is resolved in
+   JavaScript (sidepanel.js / viewer.js) to `midnight` or `daylight` depending
+   on the operating system preference.
+   ========================================================================== */
+
+/* ---------------------------------------------------------------- tokens */
+
+:root {
+  --font: "Segoe UI", system-ui, -apple-system, "Helvetica Neue", sans-serif;
+  --font-mono: "Cascadia Mono", Consolas, "SF Mono", ui-monospace, monospace;
+  --radius-sm: 6px;
+  --radius: 9px;
+  --radius-lg: 13px;
+}
+
+:root,
+[data-theme="midnight"] {
+  color-scheme: dark;
+
+  /* surfaces */
+  --bg: #11141b;
+  --surface: #171b24;
+  --surface-2: #1e232e;
+  --surface-3: #262d3a;
+  --surface-sunken: #0d1017;
+  --surface-raised: #1a1f29;
+  --overlay: rgba(3, 5, 8, 0.66);
+
+  /* borders */
+  --line: #2c3342;
+  --line-soft: rgba(255, 255, 255, 0.06);
+  --line-strong: #414c5f;
+
+  /* text */
+  --text: #e9edf5;
+  --text-2: #c2cad9;
+  --muted: #8f99ac;
+
+  /* accent */
+  --accent: #5b8cff;
+  --accent-text: #6295ff;
+  --accent-soft: #4365b5;
+  --accent-line: rgba(91, 140, 255, 0.42);
+  --accent-tint: rgba(91, 140, 255, 0.12);
+  --accent-tint-2: rgba(91, 140, 255, 0.2);
+  --accent-tint-3: rgba(91, 140, 255, 0.3);
+  --on-accent: #08101f;
+  --accent-glow: rgba(91, 140, 255, 0.1);
+
+  /* states */
+  --success: #46d39a;
+  --success-text: #46d39a;
+  --success-tint: rgba(70, 211, 154, 0.12);
+  --success-line: rgba(70, 211, 154, 0.36);
+  --on-success: #04150d;
+
+  --danger: #ff7a6b;
+  --danger-text: #ff7a6b;
+  --danger-tint: rgba(255, 122, 107, 0.12);
+  --danger-line: rgba(255, 122, 107, 0.36);
+  --on-danger: #1a0705;
+
+  --info: #a58bff;
+  --info-text: #a58bff;
+  --info-tint: rgba(165, 139, 255, 0.13);
+  --info-line: rgba(165, 139, 255, 0.36);
+
+  --warm: #d9a55f;
+  --warm-text: #d9a55f;
+  --warm-tint: rgba(217, 165, 95, 0.12);
+  --warm-line: rgba(217, 165, 95, 0.32);
+
+  /* header wordmark: gold capitals drawn straight on the topbar, no plate, so
+     the light themes swap the gold for a bronze that still clears 4.5:1. */
+  --wm-top: #fbe9bb;
+  --wm-mid: #e8c684;
+  --wm-bot: #b98d42;
+  --wm-sub: #ba9557;
+  --wm-mark: #c9a35c;
+
+  /* item rarities: gold rare, blue crafted/fractured, magenta desecrated */
+  --r-normal: #c7cedb;
+  --r-magic: #8b8bff;
+  --r-rare: #e8c85a;
+  --r-unique: #d98a4a;
+  --r-gem: #35c3b4;
+  --r-currency: #b9a06a;
+  --r-corrupt: #d64545;
+  --r-implicit: #9fb0c8;
+  --r-crafted: #7fc4ff;
+  --r-fractured: #7fc4ff;
+  --r-enchant: #c79cff;
+  --r-rune: #9d8cff;
+  --r-explicit: #8b8bff;
+  --r-desec: #e07acc;
+  --r-skill: #8b8bff;
+
+  /* effects */
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.42);
+  --shadow-2: 0 18px 48px rgba(0, 0, 0, 0.56);
+  --shadow-icon: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --scroll-thumb: #354052;
+  --topbar-bg: rgba(17, 20, 27, 0.88);
+  --tabs-bg: rgba(17, 20, 27, 0.94);
+}
+
+/* -------------------------------------------------------------- */
+
+[data-theme="graphite"] {
+  color-scheme: dark;
+
+  /* surfaces */
+  --bg: #131315;
+  --surface: #1a1a1d;
+  --surface-2: #212125;
+  --surface-3: #2a2a2f;
+  --surface-sunken: #0f0f11;
+  --surface-raised: #1d1d20;
+  --overlay: rgba(3, 5, 8, 0.66);
+
+  /* borders */
+  --line: #33343a;
+  --line-soft: rgba(255, 255, 255, 0.06);
+  --line-strong: #4a4c53;
+
+  /* text */
+  --text: #ededee;
+  --text-2: #c6c7cc;
+  --muted: #94949b;
+
+  /* accent */
+  --accent: #7fb3e8;
+  --accent-text: #7fb3e8;
+  --accent-soft: #5c7fa4;
+  --accent-line: rgba(127, 179, 232, 0.42);
+  --accent-tint: rgba(127, 179, 232, 0.12);
+  --accent-tint-2: rgba(127, 179, 232, 0.2);
+  --accent-tint-3: rgba(127, 179, 232, 0.3);
+  --on-accent: #08101f;
+  --accent-glow: rgba(127, 179, 232, 0.1);
+
+  /* states */
+  --success: #57cf95;
+  --success-text: #57cf95;
+  --success-tint: rgba(87, 207, 149, 0.12);
+  --success-line: rgba(87, 207, 149, 0.36);
+  --on-success: #04150d;
+
+  --danger: #f0796b;
+  --danger-text: #f0796b;
+  --danger-tint: rgba(240, 121, 107, 0.12);
+  --danger-line: rgba(240, 121, 107, 0.36);
+  --on-danger: #1a0705;
+
+  --info: #a8a3e8;
+  --info-text: #a8a3e8;
+  --info-tint: rgba(168, 163, 232, 0.13);
+  --info-line: rgba(168, 163, 232, 0.36);
+
+  --warm: #d3b183;
+  --warm-text: #d3b183;
+  --warm-tint: rgba(211, 177, 131, 0.12);
+  --warm-line: rgba(211, 177, 131, 0.32);
+
+  /* item rarities: gold rare, blue crafted/fractured, magenta desecrated */
+  --r-normal: #c7cedb;
+  --r-magic: #8b8bff;
+  --r-rare: #e8c85a;
+  --r-unique: #d98a4a;
+  --r-gem: #35c3b4;
+  --r-currency: #b9a06a;
+  --r-corrupt: #d64545;
+  --r-implicit: #9fb0c8;
+  --r-crafted: #7fc4ff;
+  --r-fractured: #7fc4ff;
+  --r-enchant: #c79cff;
+  --r-rune: #9d8cff;
+  --r-explicit: #8b8bff;
+  --r-desec: #e07acc;
+  --r-skill: #8b8bff;
+
+  /* effects */
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.42);
+  --shadow-2: 0 18px 48px rgba(0, 0, 0, 0.56);
+  --shadow-icon: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --scroll-thumb: #3d3f45;
+  --topbar-bg: rgba(19, 19, 21, 0.88);
+  --tabs-bg: rgba(19, 19, 21, 0.94);
+}
+
+/* -------------------------------------------------------------- */
+
+[data-theme="ember"] {
+  color-scheme: dark;
+
+  /* surfaces */
+  --bg: #16110d;
+  --surface: #1e1815;
+  --surface-2: #261f1b;
+  --surface-3: #312823;
+  --surface-sunken: #110d0a;
+  --surface-raised: #221b17;
+  --overlay: rgba(3, 5, 8, 0.66);
+
+  /* borders */
+  --line: #3a3029;
+  --line-soft: rgba(255, 255, 255, 0.06);
+  --line-strong: #524437;
+
+  /* text */
+  --text: #f2ebe4;
+  --text-2: #d0c4b8;
+  --muted: #9c8d7f;
+
+  /* accent */
+  --accent: #ff9a4d;
+  --accent-text: #ff9a4d;
+  --accent-soft: #b46e39;
+  --accent-line: rgba(255, 154, 77, 0.42);
+  --accent-tint: rgba(255, 154, 77, 0.12);
+  --accent-tint-2: rgba(255, 154, 77, 0.2);
+  --accent-tint-3: rgba(255, 154, 77, 0.3);
+  --on-accent: #08101f;
+  --accent-glow: rgba(255, 154, 77, 0.1);
+
+  /* states */
+  --success: #63d69f;
+  --success-text: #63d69f;
+  --success-tint: rgba(99, 214, 159, 0.12);
+  --success-line: rgba(99, 214, 159, 0.36);
+  --on-success: #04150d;
+
+  --danger: #ff6f61;
+  --danger-text: #ff6f61;
+  --danger-tint: rgba(255, 111, 97, 0.12);
+  --danger-line: rgba(255, 111, 97, 0.36);
+  --on-danger: #1a0705;
+
+  --info: #c08bff;
+  --info-text: #c08bff;
+  --info-tint: rgba(192, 139, 255, 0.13);
+  --info-line: rgba(192, 139, 255, 0.36);
+
+  --warm: #e3b074;
+  --warm-text: #e3b074;
+  --warm-tint: rgba(227, 176, 116, 0.12);
+  --warm-line: rgba(227, 176, 116, 0.32);
+
+  /* item rarities: gold rare, blue crafted/fractured, magenta desecrated */
+  --r-normal: #c7cedb;
+  --r-magic: #8b8bff;
+  --r-rare: #e8c85a;
+  --r-unique: #d98a4a;
+  --r-gem: #35c3b4;
+  --r-currency: #b9a06a;
+  --r-corrupt: #d64545;
+  --r-implicit: #9fb0c8;
+  --r-crafted: #7fc4ff;
+  --r-fractured: #7fc4ff;
+  --r-enchant: #c79cff;
+  --r-rune: #9d8cff;
+  --r-explicit: #8b8bff;
+  --r-desec: #e07acc;
+  --r-skill: #8b8bff;
+
+  /* effects */
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.42);
+  --shadow-2: 0 18px 48px rgba(0, 0, 0, 0.56);
+  --shadow-icon: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --scroll-thumb: #43382f;
+  --topbar-bg: rgba(22, 17, 13, 0.88);
+  --tabs-bg: rgba(22, 17, 13, 0.94);
+}
+
+/* -------------------------------------------------------------- */
+
+[data-theme="forest"] {
+  color-scheme: dark;
+
+  /* surfaces */
+  --bg: #0f1512;
+  --surface: #161e1a;
+  --surface-2: #1d2722;
+  --surface-3: #27332c;
+  --surface-sunken: #0b110e;
+  --surface-raised: #1a231e;
+  --overlay: rgba(3, 5, 8, 0.66);
+
+  /* borders */
+  --line: #2a3a31;
+  --line-soft: rgba(255, 255, 255, 0.06);
+  --line-strong: #3d5347;
+
+  /* text */
+  --text: #e7f0ea;
+  --text-2: #bfd0c6;
+  --muted: #88a094;
+
+  /* accent */
+  --accent: #a8d95a;
+  --accent-text: #a8d95a;
+  --accent-soft: #769942;
+  --accent-line: rgba(168, 217, 90, 0.42);
+  --accent-tint: rgba(168, 217, 90, 0.12);
+  --accent-tint-2: rgba(168, 217, 90, 0.2);
+  --accent-tint-3: rgba(168, 217, 90, 0.3);
+  --on-accent: #08101f;
+  --accent-glow: rgba(168, 217, 90, 0.1);
+
+  /* states */
+  --success: #3fd39a;
+  --success-text: #3fd39a;
+  --success-tint: rgba(63, 211, 154, 0.12);
+  --success-line: rgba(63, 211, 154, 0.36);
+  --on-success: #04150d;
+
+  --danger: #ff7d6a;
+  --danger-text: #ff7d6a;
+  --danger-tint: rgba(255, 125, 106, 0.12);
+  --danger-line: rgba(255, 125, 106, 0.36);
+  --on-danger: #1a0705;
+
+  --info: #7fc0e8;
+  --info-text: #7fc0e8;
+  --info-tint: rgba(127, 192, 232, 0.13);
+  --info-line: rgba(127, 192, 232, 0.36);
+
+  --warm: #d7b06a;
+  --warm-text: #d7b06a;
+  --warm-tint: rgba(215, 176, 106, 0.12);
+  --warm-line: rgba(215, 176, 106, 0.32);
+
+  /* item rarities: gold rare, blue crafted/fractured, magenta desecrated */
+  --r-normal: #c7cedb;
+  --r-magic: #8b8bff;
+  --r-rare: #e8c85a;
+  --r-unique: #d98a4a;
+  --r-gem: #35c3b4;
+  --r-currency: #b9a06a;
+  --r-corrupt: #d64545;
+  --r-implicit: #9fb0c8;
+  --r-crafted: #7fc4ff;
+  --r-fractured: #7fc4ff;
+  --r-enchant: #c79cff;
+  --r-rune: #9d8cff;
+  --r-explicit: #8b8bff;
+  --r-desec: #e07acc;
+  --r-skill: #8b8bff;
+
+  /* effects */
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.42);
+  --shadow-2: 0 18px 48px rgba(0, 0, 0, 0.56);
+  --shadow-icon: 0 2px 8px rgba(0, 0, 0, 0.45);
+  --scroll-thumb: #2f4036;
+  --topbar-bg: rgba(15, 21, 18, 0.88);
+  --tabs-bg: rgba(15, 21, 18, 0.94);
+}
+
+/* -------------------------------------------------------------- */
+
+[data-theme="daylight"] {
+  color-scheme: light;
+
+  /* surfaces */
+  --bg: #e4e9f1;
+  --surface: #fbfcfe;
+  --surface-2: #f0f4f9;
+  --surface-3: #e0e6ef;
+  --surface-sunken: #dde3ec;
+  --surface-raised: #fbfcfe;
+  --overlay: rgba(24, 28, 36, 0.4);
+
+  /* borders */
+  --line: #ccd3df;
+  --line-soft: rgba(16, 22, 32, 0.08);
+  --line-strong: #adb7c7;
+
+  /* text */
+  --text: #0f141b;
+  --text-2: #39424f;
+  --muted: #5d6775;
+
+  /* accent */
+  --accent: #2f6bdd;
+  --accent-text: #2f6bdd;
+  --accent-soft: #6994e7;
+  --accent-line: rgba(47, 107, 221, 0.42);
+  --accent-tint: rgba(47, 107, 221, 0.12);
+  --accent-tint-2: rgba(47, 107, 221, 0.2);
+  --accent-tint-3: rgba(47, 107, 221, 0.3);
+  --on-accent: #ffffff;
+  --accent-glow: rgba(47, 107, 221, 0.1);
+
+  /* states */
+  --success: #12855a;
+  --success-text: #12855a;
+  --success-tint: rgba(18, 133, 90, 0.12);
+  --success-line: rgba(18, 133, 90, 0.36);
+  --on-success: #ffffff;
+
+  --danger: #c63a2f;
+  --danger-text: #c63a2f;
+  --danger-tint: rgba(198, 58, 47, 0.12);
+  --danger-line: rgba(198, 58, 47, 0.36);
+  --on-danger: #ffffff;
+
+  --info: #6a45cf;
+  --info-text: #6a45cf;
+  --info-tint: rgba(106, 69, 207, 0.13);
+  --info-line: rgba(106, 69, 207, 0.36);
+
+  --warm: #8f6414;
+  --warm-text: #8f6414;
+  --warm-tint: rgba(143, 100, 20, 0.12);
+  --warm-line: rgba(143, 100, 20, 0.32);
+
+  /* bronze instead of gold: the wordmark sits on a light topbar now */
+  --wm-top: #6d4809;
+  --wm-mid: #7e5710;
+  --wm-bot: #855b15;
+  --wm-sub: #7a5413;
+  --wm-mark: #7d5510;
+
+  /* item rarities: gold rare, blue crafted/fractured, magenta desecrated */
+  --r-normal: #454b55;
+  --r-magic: #4b45c6;
+  --r-rare: #7a5f0a;
+  --r-unique: #a04a12;
+  --r-gem: #0a6b62;
+  --r-currency: #6b5a33;
+  --r-corrupt: #9c1f1f;
+  --r-implicit: #5b6678;
+  --r-crafted: #1f6fb8;
+  --r-fractured: #1f6fb8;
+  --r-enchant: #6a3fa8;
+  --r-rune: #4b45c6;
+  --r-explicit: #4b45c6;
+  --r-desec: #8a2f86;
+  --r-skill: #4b45c6;
+
+  /* effects */
+  --shadow-1: 0 1px 2px rgba(16, 24, 40, 0.07);
+  --shadow-2: 0 18px 48px rgba(16, 24, 40, 0.16);
+  --shadow-icon: 0 2px 8px rgba(16, 24, 40, 0.14);
+  --scroll-thumb: #c1c9d6;
+  --topbar-bg: rgba(228, 233, 241, 0.88);
+  --tabs-bg: rgba(228, 233, 241, 0.94);
+}
+
+/* -------------------------------------------------------------- */
+
+[data-theme="sand"] {
+  color-scheme: light;
+
+  /* surfaces */
+  --bg: #ebe3d5;
+  --surface: #fffdf8;
+  --surface-2: #f2ebdd;
+  --surface-3: #e3d9c7;
+  --surface-sunken: #e5ddce;
+  --surface-raised: #fffdf8;
+  --overlay: rgba(24, 28, 36, 0.4);
+
+  /* borders */
+  --line: #d3c7ae;
+  --line-soft: rgba(16, 22, 32, 0.08);
+  --line-strong: #b9ab8e;
+
+  /* text */
+  --text: #1a1610;
+  --text-2: #3f382c;
+  --muted: #6b6152;
+
+  /* accent */
+  --accent: #8a5a12;
+  --accent-text: #8a5a12;
+  --accent-soft: #ab8752;
+  --accent-line: rgba(138, 90, 18, 0.42);
+  --accent-tint: rgba(138, 90, 18, 0.12);
+  --accent-tint-2: rgba(138, 90, 18, 0.2);
+  --accent-tint-3: rgba(138, 90, 18, 0.3);
+  --on-accent: #ffffff;
+  --accent-glow: rgba(138, 90, 18, 0.1);
+
+  /* states */
+  --success: #2f7d52;
+  --success-text: #2f7d52;
+  --success-tint: rgba(47, 125, 82, 0.12);
+  --success-line: rgba(47, 125, 82, 0.36);
+  --on-success: #ffffff;
+
+  --danger: #b4402f;
+  --danger-text: #b4402f;
+  --danger-tint: rgba(180, 64, 47, 0.12);
+  --danger-line: rgba(180, 64, 47, 0.36);
+  --on-danger: #ffffff;
+
+  --info: #6f4baa;
+  --info-text: #6f4baa;
+  --info-tint: rgba(111, 75, 170, 0.13);
+  --info-line: rgba(111, 75, 170, 0.36);
+
+  --warm: #7b5514;
+  --warm-text: #7b5514;
+  --warm-tint: rgba(123, 85, 20, 0.12);
+  --warm-line: rgba(123, 85, 20, 0.32);
+
+  /* bronze instead of gold: the wordmark sits on a light topbar now */
+  --wm-top: #6a4608;
+  --wm-mid: #7b5410;
+  --wm-bot: #825813;
+  --wm-sub: #785112;
+  --wm-mark: #7a5310;
+
+  /* item rarities: gold rare, blue crafted/fractured, magenta desecrated */
+  --r-normal: #454b55;
+  --r-magic: #4b45c6;
+  --r-rare: #7a5f0a;
+  --r-unique: #a04a12;
+  --r-gem: #0a6b62;
+  --r-currency: #6b5a33;
+  --r-corrupt: #9c1f1f;
+  --r-implicit: #5b6678;
+  --r-crafted: #1f6fb8;
+  --r-fractured: #1f6fb8;
+  --r-enchant: #6a3fa8;
+  --r-rune: #4b45c6;
+  --r-explicit: #4b45c6;
+  --r-desec: #8a2f86;
+  --r-skill: #4b45c6;
+
+  /* effects */
+  --shadow-1: 0 1px 2px rgba(16, 24, 40, 0.07);
+  --shadow-2: 0 18px 48px rgba(16, 24, 40, 0.16);
+  --shadow-icon: 0 2px 8px rgba(16, 24, 40, 0.14);
+  --scroll-thumb: #cabfa8;
+  --topbar-bg: rgba(235, 227, 213, 0.88);
+  --tabs-bg: rgba(235, 227, 213, 0.94);
+}
+
+/* --------------------------------------------------------- theme picker */
+
+.theme-btn {
+  position: relative;
+}
+
+.theme-btn .theme-dot {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 1.5px solid var(--surface-2);
+  pointer-events: none;
+}
+
+.theme-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  z-index: 45;
+  width: 268px;
+  max-width: calc(100vw - 20px);
+  padding: 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-2);
+  animation: theme-pop-in 0.14s ease-out;
+}
+
+.theme-popover[hidden] {
+  display: none;
+}
+
+@keyframes theme-pop-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.theme-popover-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 2px 8px;
+  border-bottom: 1px solid var(--line-soft);
+  margin-bottom: 8px;
+}
+
+.theme-popover-head h2 {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.theme-popover-head button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 11px;
+  cursor: pointer;
+  padding: 2px 4px;
+  border-radius: 4px;
+}
+
+.theme-popover-head button:hover {
+  color: var(--text);
+  background: var(--surface-3);
+}
+
+.theme-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-2);
+  color: var(--text-2);
+  font-size: 12px;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color 0.14s ease, background 0.14s ease, color 0.14s ease;
+}
+
+.theme-option:hover {
+  border-color: var(--line-strong);
+  color: var(--text);
+}
+
+.theme-option[aria-pressed="true"] {
+  border-color: var(--accent-line);
+  background: var(--accent-tint);
+  color: var(--text);
+}
+
+.theme-swatch {
+  display: flex;
+  flex: 0 0 auto;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+}
+
+.theme-swatch i {
+  display: block;
+  width: 9px;
+  height: 18px;
+}
+
+.theme-swatch i:first-child {
+  width: 12px;
+}
+
+.theme-option-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.theme-option-check {
+  flex: 0 0 auto;
+  width: 13px;
+  height: 13px;
+  color: var(--accent-text);
+  opacity: 0;
+}
+
+.theme-option[aria-pressed="true"] .theme-option-check {
+  opacity: 1;
+}
+
+.theme-option[data-theme-id="auto"] {
+  grid-column: 1 / -1;
+}
+
+.theme-auto-swatch {
+  display: flex;
+  flex: 0 0 auto;
+  width: 30px;
+  height: 18px;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid var(--line-strong);
+}
+
+.theme-auto-swatch i {
+  display: block;
+  flex: 1;
+}

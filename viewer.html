@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en" data-theme="graphite">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Saved item - Poe Trade Watcher</title>
+  <link rel="stylesheet" href="themes.css">
+  <link rel="stylesheet" href="sidepanel.css">
+  <link rel="stylesheet" href="viewer.css">
+</head>
+<body class="viewer-page">
+  <header class="topbar viewer-top">
+    <div class="brand">
+      <img src="icons/icon48.png" alt="" class="brand-icon">
+      <div class="brand-text">
+        <h1>Poe Trade Watcher</h1>
+        <p id="subtitle">Saved item</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button id="copyItemBtn" class="mini-btn" type="button" disabled>Copy item</button>
+      <button id="refreshBtn" class="mini-btn" type="button" disabled>Refresh item</button>
+      <button id="watchBtn" class="mini-btn" type="button" disabled>Watch</button>
+      <a id="searchBtn" class="mini-btn" target="_blank" rel="noopener noreferrer" hidden>Price check</a>
+    </div>
+  </header>
+
+  <main id="app" class="viewer-main">
+    <div class="viewer-loading">Loading item...</div>
+  </main>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="ptc-settings.js"></script>
+  <script src="ptc-games.js"></script>
+  <script src="ptc-poe1.js"></script>
+  <script src="ptc-poe2.js"></script>
+  <script src="ptc-features.js"></script>
+  <script src="pako.min.js"></script>
+  <script src="item-utils.js"></script>
+  <script src="viewer.js"></script>
+</body>
+</html>
+
