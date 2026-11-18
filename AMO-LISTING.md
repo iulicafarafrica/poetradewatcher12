@@ -28,9 +28,65 @@ owner has.
 - **Support email:** **TODO — a real address; the form does not accept a link**
 - **Support website:** https://github.com/iulicafarafrica/poetradewatcher12
 - **License:** MIT (the repository carries the full text in `LICENSE`)
-- **Privacy policy:** `https://iulicafarafrica.github.io/poetradewatcher12/privacy.html`
-  (**TODO:** enable GitHub Pages first — Settings → Pages → Deploy from a branch →
-  `main` / `/docs`)
+- **Privacy policy:** paste the text below into the field. AMO hosts it on the
+  listing page; it does **not** take a URL. (A public HTML copy still exists at
+  `docs/privacy.html` and can be used as the support site's policy page, but it
+  is not required for submission.)
+
+## Privacy policy (paste this text)
+
+AMO hosts the policy itself, so this is plain text for the textarea. The HTML
+version in `docs/privacy.html` says the same thing in more detail.
+
+```text
+Poe Trade Watcher - Privacy Policy
+Last updated: 18 November 2026
+
+Poe Trade Watcher is an unofficial fan-made browser extension for Chrome, Edge
+and Firefox. It has no accounts, no analytics, no ads and does not sell or share
+data with anyone.
+
+What is stored on your device
+Saved trade items, gear imported from a build, builds, watched listings, search
+history, price history and settings are stored in your browser profile (the
+extension's local storage: chrome.storage.local in Chrome and Edge,
+browser.storage.local in Firefox). Price history keeps the last 50 checks of
+each item. Nothing leaves your device unless you export a backup or, in Chrome,
+turn on sync for your settings. Removing the extension deletes all of it.
+
+What is transmitted, and where
+- www.pathofexile.com: the public trade listings of the page you are viewing;
+  the same public trade API is used to fetch one listing when you save it, watch
+  it, copy its whisper or refresh its price, and a watched search is re-run on
+  its own schedule. Your existing Path of Exile session is reused for those
+  calls; nothing is sent anywhere else.
+- web.poecdn.com: item icons, loaded by the browser itself.
+- cdn.poe2db.tw and cdn.poedb.tw: ascendancy class icons.
+- poe.ninja: public currency exchange rates.
+- beta.craftofexile.com: only when you open a Craft of Exile link; downloads the
+  public data files that site itself loads. Optional host permission, requested
+  at that click.
+- mobalytics.gg: only when you click "Read page"; reads a build tab you already
+  have open. Optional host permission, requested at that click.
+- Discord webhook or ntfy topic: only if you configure them. Alerts you enable
+  contain the item name, price and seller character name. Optional host
+  permissions, requested when you first use each.
+
+What is never collected
+No email, no passwords, no browsing history outside the trade searches you make
+yourself, no location, no tracking and no telemetry. Build codes you paste are
+decoded on your device and never uploaded. The Discord webhook URL, the ntfy
+topic and whisper tokens stay in local storage, are left out of exported backups
+and are never synced.
+
+Your control
+Clear the webhook or the ntfy topic to stop alerts; delete items and builds with
+the delete button; export a backup at any time; remove the extension to erase
+everything.
+
+Contact
+Questions or data requests: https://github.com/iulicafarafrica/poetradewatcher12/issues
+```
 
 ## Summary
 
@@ -80,8 +136,8 @@ it. Every setting is stored in your browser profile.
 
 No account, no analytics, no telemetry, no ads. Saved items and settings stay in
 your browser. The extension reads only the public trade pages you open; it
-contacts Discord or ntfy only if you configure them. The full policy is at
-https://iulicafarafrica.github.io/poetradewatcher12/privacy.html
+contacts Discord or ntfy only if you configure them. The full policy is on this
+page, under Privacy Policy.
 
 ## Notes
 
