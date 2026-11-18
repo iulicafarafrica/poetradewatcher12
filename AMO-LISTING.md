@@ -179,12 +179,20 @@ icons loaded by the browser), cdn.poe2db.tw and cdn.poedb.tw (ascendancy icons),
 poe.ninja (currency rates), plus the optional endpoints above. Nothing is sent
 to a server of ours; there is no server of ours.
 
-No remote code
---------------
-Every script is shipped in the package and readable. The only minified file is
-pako.min.js, the unmodified pako 2.1.0 release (MIT AND Zlib) from
-https://github.com/nodeca/pako, used to inflate Path of Building codes. It
-carries its version and licence in the first line of the file.
+No source code package, and no build step
+-----------------------------------------
+No first-party file is generated, minified, bundled or templated: every .js,
+.css and .html file in the zip is the hand-written file that ships, and it can
+be read as-is. There is nothing to rebuild, so there is no build script.
+
+Third-party library
+-------------------
+pako 2.1.0 (MIT AND Zlib), unmodified, from the official release:
+  original file: https://github.com/nodeca/pako/blob/2.1.0/dist/pako.min.js
+  readable source: https://github.com/nodeca/pako/tree/2.1.0/lib
+The shipped pako.min.js is byte-identical to that release file (46,859 bytes);
+SHA-256 EDE2693A4A6A5126B9D35669062B358ECAB6AE7B9B86A1CF302FEB45A8514907.
+It inflates Path of Building codes. No other third-party code is included.
 
 Data collection
 ---------------
