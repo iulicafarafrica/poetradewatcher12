@@ -230,9 +230,15 @@ AMO's field accepts 3,000 characters; this text is about 2,200, so it fits
 without truncation.
 
 ```
-No source package is needed: no first-party file is generated, minified,
-bundled or templated. Every .js, .css and .html file in the zip is the
-hand-written file that ships, so there is no build step to reproduce.
+No source package is needed: the full source is public at
+https://github.com/iulicafarafrica/poetradewatcher12 and every file in the zip
+is plain, readable JavaScript. Nothing is minified, bundled or templated.
+
+One build step, for transparency: the Firefox package is the shared source with
+lines marked "chrome-only" removed, so the package carries no Chrome-only API.
+tools/build-firefox.js does that and fails the build if such a call survives.
+No code is generated or rewritten; only whole lines are dropped. The Chrome and
+Edge packages use the same files without that step.
 
 Third-party library: pako 2.1.0 (MIT AND Zlib), unmodified, from the official
 release.
@@ -241,14 +247,6 @@ release.
 The shipped pako.min.js is byte-identical to that release file (46,859 bytes),
 SHA-256 EDE2693A4A6A5126B9D35669062B358ECAB6AE7B9B86A1CF302FEB45A8514907.
 It inflates Path of Building codes. No other third-party code is included.
-
-The four validator warnings are Chrome-only branches, guarded at runtime:
-- sidePanel.setPanelBehavior (background.js:57, 59) is inside
-  if (HAS_SIDE_PANEL), false when chrome.sidePanel is undefined.
-- offscreen.createDocument (background.js:3313, 3318) is inside
-  if (chrome.offscreen && chrome.offscreen.createDocument).
-In Firefox neither runs: the interface is the sidebar (sidebar_action) and the
-alert tone is played by the sidebar or an open trade tab.
 
 Permissions: storage, unlimitedStorage (2,000 items, 200 builds, price history
 and an icon cache exceed the default quota; nothing is uploaded), alarms and
