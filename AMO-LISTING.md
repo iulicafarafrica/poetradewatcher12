@@ -147,84 +147,48 @@ Grinding Gear Games. Path of Exile is a trademark of Grinding Gear Games.
 
 ## Notes for Reviewers
 
+AMO's field accepts 3,000 characters; this text is about 2,200, so it fits
+without truncation.
+
 ```
-What this add-on is
--------------------
-A helper for the official Path of Exile trade site (www.pathofexile.com/trade
-and /trade2). It adds a small toolbar to trade search pages, a Save and a Watch
-button to each listing, and a side panel / sidebar that stores them.
+No source package is needed: no first-party file is generated, minified,
+bundled or templated. Every .js, .css and .html file in the zip is the
+hand-written file that ships, so there is no build step to reproduce.
 
-Permissions
------------
-- storage: saved items, builds, watchers and settings, all local.
-- unlimitedStorage: 2,000 saved items, 200 builds, price history and a small
-  icon cache go past the default quota. Nothing is uploaded to make room.
-- alarms: the watcher tick and timed search watches must run with the panel
-  closed.
-- notifications: the desktop alert when a watched price changes.
-- scripting: only for "Read page", which reads a Mobalytics build tab the user
-  already has open, and only after the optional host permission is granted at
-  that click.
-- Optional host permissions (requested at the moment of use, never at install):
-  beta.craftofexile.com, mobalytics.gg, discord.com, discordapp.com, ntfy.sh.
-  A self-hosted ntfy server is contacted at the address the user types; there is
-  no broad host permission for it.
-There is no "tabs" permission. The extension can see a tab's address only on
-hosts it already has permission for.
-
-Network
--------
-Only public endpoints: www.pathofexile.com (trade API), web.poecdn.com (item
-icons loaded by the browser), cdn.poe2db.tw and cdn.poedb.tw (ascendancy icons),
-poe.ninja (currency rates), plus the optional endpoints above. Nothing is sent
-to a server of ours; there is no server of ours.
-
-No source code package, and no build step
------------------------------------------
-No first-party file is generated, minified, bundled or templated: every .js,
-.css and .html file in the zip is the hand-written file that ships, and it can
-be read as-is. There is nothing to rebuild, so there is no build script.
-
-Third-party library
--------------------
-pako 2.1.0 (MIT AND Zlib), unmodified, from the official release:
-  original file: https://github.com/nodeca/pako/blob/2.1.0/dist/pako.min.js
-  readable source: https://github.com/nodeca/pako/tree/2.1.0/lib
-The shipped pako.min.js is byte-identical to that release file (46,859 bytes);
+Third-party library: pako 2.1.0 (MIT AND Zlib), unmodified, from the official
+release.
+  https://github.com/nodeca/pako/blob/2.1.0/dist/pako.min.js
+  https://github.com/nodeca/pako/tree/2.1.0/lib
+The shipped pako.min.js is byte-identical to that release file (46,859 bytes),
 SHA-256 EDE2693A4A6A5126B9D35669062B358ECAB6AE7B9B86A1CF302FEB45A8514907.
 It inflates Path of Building codes. No other third-party code is included.
 
-Data collection
----------------
+The four validator warnings are Chrome-only branches, guarded at runtime:
+- sidePanel.setPanelBehavior (background.js:57, 59) is inside
+  if (HAS_SIDE_PANEL), false when chrome.sidePanel is undefined.
+- offscreen.createDocument (background.js:3313, 3318) is inside
+  if (chrome.offscreen && chrome.offscreen.createDocument).
+In Firefox neither runs: the interface is the sidebar (sidebar_action) and the
+alert tone is played by the sidebar or an open trade tab.
+
+Permissions: storage, unlimitedStorage (2,000 items, 200 builds, price history
+and an icon cache exceed the default quota; nothing is uploaded), alarms and
+notifications for the watcher, scripting only for "Read page", which reads a
+Mobalytics build tab the user already has open. beta.craftofexile.com,
+mobalytics.gg, discord.com, discordapp.com and ntfy.sh are optional
+permissions requested at the moment of use, never at install. There is no
+"tabs" permission.
+
 The manifest declares data_collection_permissions.required = ["none"]. The
-add-on has no analytics or telemetry; it only sends the alerts the user
-explicitly configures to the endpoint the user provides.
+add-on has no server, no analytics and no telemetry; it reads the public trade
+API on www.pathofexile.com and contacts Discord or ntfy only if the user
+configures them. Full detail is in the privacy policy.
 
-The four validator warnings
----------------------------
-sidePanel.setPanelBehavior (background.js:57, 59) and
-offscreen.createDocument (background.js:3313, 3318) are Chrome-only branches.
-Both are guarded at runtime:
-  const HAS_SIDE_PANEL = !!(chrome.sidePanel && chrome.sidePanel.setPanelBehavior);
-  if (chrome.offscreen && chrome.offscreen.createDocument) { ... }
-In Firefox those objects are undefined, so neither line runs: the panel is the
-sidebar (sidebar_action in the manifest) and the alert tone is played by the
-sidebar or an open trade tab. The warnings are static portability notices, not
-dead calls.
+To test without a Path of Exile account: open
+https://www.pathofexile.com/trade/search/Standard, run a search, and the
+extension adds a toolbar plus Save / Watch buttons to each listing. The
+toolbar button opens the sidebar. Build import, watchers and alert channels
+need no account.
 
-How to test without a Path of Exile account
--------------------------------------------
-1. Install, then open https://www.pathofexile.com/trade/search/Standard
-   (or /trade2/search/poe2/Standard for the second game).
-2. Run any search. The extension adds a "Mod colors" toolbar above the results
-   and a Save / Watch button to each row.
-3. Click Save. The item appears under Saved items in the panel; the toolbar
-   button opens the panel (sidebar in Firefox).
-4. Everything else (build import, watchers, Discord/ntfy) is reachable from the
-   panel tabs and does not need an account. Discord and ntfy are optional and
-   off by default; their permissions are requested only when used.
-
-Contact
--------
 Issues: https://github.com/iulicafarafrica/poetradewatcher12/issues
 ```
