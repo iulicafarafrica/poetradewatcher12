@@ -6,7 +6,7 @@
 
 **Save any Path of Exile 1 or 2 trade listing, keep it with every modifier and price, import your Path of Building gear, and get told the moment a price moves.**
 
-![version](https://img.shields.io/badge/version-2.9.51-c9a227?style=flat-square)
+![version](https://img.shields.io/badge/version-2.9.52-c9a227?style=flat-square)
 ![licence](https://img.shields.io/badge/licence-MIT-3fb950?style=flat-square)
 ![manifest](https://img.shields.io/badge/manifest-v3-2f81f7?style=flat-square)
 ![chrome](https://img.shields.io/badge/Chrome-116%2B-4285f4?style=flat-square)
@@ -478,6 +478,21 @@ Host permissions are exactly those two trade/price hosts; everything else is an
 **optional** permission requested at the moment you use the feature. There is no
 broad host permission for self-hosted ntfy: the address you type is contacted
 directly under CORS.
+
+### Permissions explained
+
+| Permission | What it is for | What it cannot do |
+| --- | --- | --- |
+| `storage` | Saved items, collections, builds, watchers and settings live in this browser profile | Nothing leaves the profile unless you configured Discord or ntfy |
+| `unlimitedStorage` | Item artwork and build data go past the 10 MB default quota | It only lifts a size limit; no data is uploaded to make room |
+| `alarms` | The watcher tick and the timed search watches still run with the panel closed | Wake anything but this extension |
+| `notifications` | The desktop toast when a watched price changes | Read your notifications or send them |
+| `scripting` | Reads the Mobalytics build tab **you already have open**, and only after you grant that optional host | Touch any tab on any other site |
+| `sidePanel` | Puts the interface in the side panel | Read the page behind it |
+
+`tabs` is deliberately **not** requested. The extension can see a tab's address
+and title only on hosts it already has permission for, which is why it can find
+your Mobalytics build tab once you allow that one host, and nothing else.
 
 ---
 

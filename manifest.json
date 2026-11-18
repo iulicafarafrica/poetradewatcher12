@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Poe Trade Watcher",
   "description": "Save Path of Exile 1 and 2 trade items, track prices, build collections, and get Discord or ntfy alerts.",
-  "version": "2.9.51",
+  "version": "2.9.52",
   "author": "Poe Trade Watcher",
   "minimum_chrome_version": "116",
   "permissions": ["storage", "sidePanel", "alarms", "notifications", "unlimitedStorage", "scripting", "offscreen"],
@@ -45,7 +45,7 @@
         "https://www.pathofexile.com/trade2/*",
         "https://www.pathofexile.com/trade/*"
       ],
-      "js": ["ptc-games.js", "ptc-poe1.js", "ptc-poe2.js", "ptc-settings.js", "item-utils.js", "content.js"],
+      "js": ["ptc-games.js", "ptc-poe1.js", "ptc-poe2.js", "ptc-settings.js", "item-utils.js", "ptc-sound.js", "content.js"],
       "css": ["content.css"],
       "run_at": "document_idle"
     }

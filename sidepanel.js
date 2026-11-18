@@ -3727,6 +3727,52 @@ function bindEvents() {
   });
 }
 
+/* ------------------------------------------------------------------ */
+/* Opening the panel in a tab                                          */
+/* ------------------------------------------------------------------ */
+/* Chrome docks the panel next to the page and Firefox puts it in the sidebar;
+   in both the width is the browser's to decide. On a small screen the same
+   page as a normal tab is the readable option, so Firefox gets a small button
+   for it. The panel is already a tab there, hence the check. */
+function currentTab() {
+  return new Promise((resolve) => {
+    try {
+      if (!chrome.tabs || typeof chrome.tabs.getCurrent !== 'function') {
+        resolve(null);
+        return;
+      }
+      const answer = (tab) => resolve(tab || null);
+      const maybe = chrome.tabs.getCurrent(answer);
+      if (maybe && typeof maybe.then === 'function') maybe.then(answer).catch(() => resolve(null));
+    } catch (error) {
+      resolve(null);
+    }
+  });
+}
+
+async function addOpenInTabButton() {
+  if (chrome.sidePanel) return;
+  if (await currentTab()) return;
+
+  const button = document.createElement('button');
+  button.id = 'openTabBtn';
+  button.type = 'button';
+  button.className = 'icon-btn';
+  button.title = 'Open in a tab';
+  button.setAttribute('aria-label', 'Open in a tab');
+  button.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 4H20v5.5M20 4l-7.6 7.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/><path d="M18 13.5V19a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 4 19V8a1.5 1.5 0 0 1 1.5-1.5H10" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  button.addEventListener('click', () => {
+    try {
+      chrome.tabs.create({ url: chrome.runtime.getURL('sidepanel.html'), active: true });
+    } catch (error) {
+      /* without the tabs API there is nowhere to open it */
+    }
+  });
+
+  const anchor = $('coffeeBtn');
+  if (anchor && anchor.parentElement) anchor.parentElement.insertBefore(button, anchor);
+}
+
 async function init() {
   buildThemeControls();
   bindEvents();
@@ -3739,6 +3785,7 @@ async function init() {
   setTab('items');
   preloadPrices();
   loadLeagues(false);
+  addOpenInTabButton();
 }
 
 init();

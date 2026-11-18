@@ -1,5 +1,31 @@
 # Poe Trade Watcher — Changelog
 
+## 2.9.52
+
+The same extension in Firefox, built from the same source; the panel is the browser sidebar there, and one save bug is now impossible to hit unnoticed.
+
+### Added
+- **A Firefox build.** `tools/build-firefox.js` copies the shared source into `PoeTradeFirefox/` and writes the manifest Firefox needs: `sidebar_action` instead of `sidePanel`, an event page (`background.scripts`) instead of a service worker, `optional_permissions` instead of `optional_host_permissions`, and the `data_collection_permissions` declaration. Nothing is forked: a fix made for one browser reaches the other on the next build.
+- **Clicking the toolbar button toggles the sidebar** in Firefox (open when closed, close when open), the way Chrome's panel button behaves.
+- **"Open in a tab"** button in the panel header, shown only in Firefox and only while the panel is the sidebar, for narrow screens.
+
+### Fixed
+- **The privacy page theme never applied, in either browser.** The inline script was blocked by the extension's own CSP; it is now `privacy.js`.
+- **Firefox background started with `PTC_SETTINGS is undefined`**: `importScripts` does not exist in a Firefox background page, so the helper files are listed in `background.scripts` in order.
+- **Alert sound in Firefox**, which has no offscreen document: the tone is played by the page or the sidebar through the new `ptc-sound.js`.
+
+### Hardening
+- **Discord posts declare `allowed_mentions: { parse: [] }`.** Mentions inside embeds do not ping today; the payload now says so explicitly.
+- **A restored backup stores a history `url` only if it parses as a trade URL**, like every other field from a file the extension did not write.
+- **README lists every permission** with what it is for and what it cannot do, and states that `tabs` is deliberately not requested.
+- **The privacy policy is browser-neutral**: it names the storage of both browsers, marks sync as Chrome-only, adds Mozilla's add-on policies next to the Chrome Web Store ones, and no longer carries a placeholder contact. A public copy for the add-on listing is generated at `docs/privacy.html` from the same file (`tools/build-privacy-page.js`).
+
+### Still open
+- The policy points at GitHub issues for contact. A dedicated email address can replace that line when one is available; add-ons.mozilla.org also asks for a support email at submission time.
+
+### Tests
+- 202 (importer/schema/CoE/PoB limits), 70 (worker), 27 (search rules). Firefox 160.0.1: `web-ext lint` 0 errors, extension loaded, panel rendered, storage round-trip, save from the trade page reached the panel, 0 console errors.
+
 ## 2.9.51
 
 A pass over the review findings: alerts that respect their switch, watchers that take turns, state that survives a stopped worker, and untrusted input that stays bounded.

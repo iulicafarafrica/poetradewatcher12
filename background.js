@@ -51,9 +51,42 @@ const SEARCH_STATUS = (globalThis.PTC_GAMES && globalThis.PTC_GAMES.TRADE_STATUS
 const SEARCH_STATUS_ANY = (globalThis.PTC_GAMES && globalThis.PTC_GAMES.TRADE_STATUS
   && globalThis.PTC_GAMES.TRADE_STATUS.any) || 'any';
 
+/* Chrome opens the side panel from the toolbar button. Firefox has no side
+   panel API, so the same click toggles the sidebar instead; the two browsers
+   share one source and only this branch differs. */
+const HAS_SIDE_PANEL = !!(chrome.sidePanel && chrome.sidePanel.setPanelBehavior);
 try {
-  chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
+  if (HAS_SIDE_PANEL) chrome.sidePanel.setPanelBehavior({ openPanelOnActionClick: true });
 } catch (_) {}
+if (!HAS_SIDE_PANEL && chrome.action && chrome.action.onClicked && chrome.sidebarAction) {
+  chrome.action.onClicked.addListener(() => {
+    /* Firefox reports the click instead of opening the sidebar itself, so this
+       has to behave like Chrome's panel button: open when it is closed, close
+       when it is open. */
+    let settled = false;
+    const apply = (isOpen) => {
+      if (settled) return;
+      settled = true;
+      try {
+        const call = isOpen ? chrome.sidebarAction.close() : chrome.sidebarAction.open();
+        if (call && typeof call.catch === 'function') call.catch(() => {});
+      } catch (error) {
+        /* nothing else can toggle it */
+      }
+    };
+    try {
+      /* Promise in one namespace, callback in the other; both are answered. */
+      if (!chrome.sidebarAction.isOpen) {
+        apply(false);
+        return;
+      }
+      const known = chrome.sidebarAction.isOpen({}, apply);
+      if (known && typeof known.then === 'function') known.then(apply).catch(() => apply(false));
+    } catch (error) {
+      apply(false);
+    }
+  });
+}
 
 /* ------------------------------------------------------------------ */
 /* Helpers and storage access                                         */
@@ -3277,18 +3310,23 @@ async function playWatchSound() {
   if (Date.now() - lastSoundAt < SOUND_COOLDOWN) return;
   lastSoundAt = Date.now();
   try {
-    if (!chrome.offscreen || !chrome.offscreen.createDocument) return;
-    const contexts = chrome.runtime.getContexts
-      ? await chrome.runtime.getContexts({ contextTypes: ['OFFSCREEN_DOCUMENT'] })
-      : [];
-    if (!contexts || !contexts.length) {
-      await chrome.offscreen.createDocument({
-        url: 'offscreen.html',
-        reasons: ['AUDIO_PLAYBACK'],
-        justification: 'Play a short alert when a watched price changes.',
-      });
+    if (chrome.offscreen && chrome.offscreen.createDocument) {
+      const contexts = chrome.runtime.getContexts
+        ? await chrome.runtime.getContexts({ contextTypes: ['OFFSCREEN_DOCUMENT'] })
+        : [];
+      if (!contexts || !contexts.length) {
+        await chrome.offscreen.createDocument({
+          url: 'offscreen.html',
+          reasons: ['AUDIO_PLAYBACK'],
+          justification: 'Play a short alert when a watched price changes.',
+        });
+      }
+      await chrome.runtime.sendMessage({ target: 'ptc-offscreen', type: 'ptc:sound' });
+      return;
     }
-    await chrome.runtime.sendMessage({ target: 'ptc-offscreen', type: 'ptc:sound' });
+    /* Firefox has no offscreen document: the sidebar, or a trade tab that is
+       open, plays the tone instead. With neither open there is no sound. */
+    await chrome.runtime.sendMessage({ target: 'ptc-sound-page', type: 'ptc:sound' });
   } catch (error) {
     /* the sound is a nicety; a failure never blocks the alert */
   }
@@ -3364,7 +3402,14 @@ async function postDiscord(settings, title, message, color, icon) {
   const embed = { title: title, description: message, color: color || 0xd8b56a };
   const thumb = cleanString(icon, 500);
   if (/^https:\/\//.test(thumb)) embed.thumbnail = { url: thumb };
-  return postDiscordJson(target.url, { username: 'Poe Trade Watcher', embeds: [embed] });
+  /* Item text comes from the trade site, so it is not ours to trust. Mentions
+     inside an embed do not ping today, but saying so explicitly costs nothing
+     and keeps it true whatever Discord does with embeds later. */
+  return postDiscordJson(target.url, {
+    username: 'Poe Trade Watcher',
+    allowed_mentions: { parse: [] },
+    embeds: [embed],
+  });
 }
 
 /* A build pasted into Discord should read like the build page: the build name
@@ -3450,7 +3495,11 @@ async function handleBuildDiscord(collectionId) {
   if (current.length) messages.push(current);
 
   for (const group of messages) {
-    const posted = await postDiscordJson(target.url, { username: 'Poe Trade Watcher', embeds: group });
+    const posted = await postDiscordJson(target.url, {
+      username: 'Poe Trade Watcher',
+      allowed_mentions: { parse: [] },
+      embeds: group,
+    });
     if (!posted.ok) return { ok: false, error: posted.error };
   }
   return { ok: true, items: records.length, messages: messages.length };
@@ -4667,7 +4716,9 @@ async function restorePayload(payload) {
           league: cleanText(entry.league, 80),
           queryId: cleanQueryId(entry.queryId),
           name: cleanName(entry.name) || 'Search',
-          url: cleanString(entry.url, 2000),
+          /* Only a trade URL this extension understands gets stored; a backup
+             is a file the extension did not write. */
+          url: parseTradeUrl(entry.url) ? cleanString(entry.url, 2000) : '',
           visitedAt: Number(entry.visitedAt) || Date.now(),
           visits: Number(entry.visits) || 1,
         }))

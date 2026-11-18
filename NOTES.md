@@ -27,5 +27,6 @@ extension.
 
 ## Open item
 
-- `privacy.html` still carries the placeholder `privacy@example.com` until the
-  real contact address is supplied.
+- The privacy policy links to GitHub issues for contact. A dedicated email
+  address can replace that line, and add-ons.mozilla.org asks for a support
+  email at submission time.
