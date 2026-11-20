@@ -112,7 +112,9 @@ function firefoxManifest(chrome) {
     action: chrome.action,
     sidebar_action: {
       default_panel: 'sidepanel.html',
-      default_title: chrome.name,
+      /* The listing name is long; the sidebar header uses the short toolbar
+         title, which is what a user sees when hovering the button. */
+      default_title: chrome.action.default_title || chrome.name,
       default_icon: { 16: 'icons/icon16.png', 32: 'icons/icon32.png', 48: 'icons/icon48.png' },
       open_at_install: false,
     },

@@ -1,4 +1,4 @@
-# AMO submission — Poe Trade Watcher 2.9.53
+# AMO submission — Poe Trade Watcher 2.9.54
 
 Everything needed for https://addons.mozilla.org/developers/ → **Submit a New Add-on**
 → **On this site**.
@@ -10,7 +10,7 @@ owner has.
 
 ## Upload
 
-- **File:** `poe_trade_watcher-2.9.53.zip` (from `PoeTradeFirefox/dist/`)
+- **File:** `poe_trade_watcher-2.9.54.zip` (from `PoeTradeFirefox/dist/`)
 - **Platforms:** Desktop only. The interface is built for a side panel or a
   sidebar; Firefox for Android has neither.
 - **Source code:** not needed. Every shipped file is plain, unminified
@@ -19,7 +19,7 @@ owner has.
 
 ## Listing fields
 
-- **Name:** Poe Trade Watcher
+- **Name:** Poe Trade Watcher (listing name; the manifest name is now "Poe Trade Watcher - PoE 1 & 2 Trade Helper", which is what about:addons shows)
 - **Add-on URL:** `poe-trade-watcher` → `https://addons.mozilla.org/firefox/addon/poe-trade-watcher/`
   (AMO warns if the slug is taken; `poe-trade-watcher-poe1-poe2` is the fallback)
 - **Experimental:** no
@@ -102,7 +102,7 @@ Poe Trade Watcher adds one-click actions and alerts directly on the official tra
 
 Up to date: ready for Covens, the current Path of Exile 1 league, and for the Path of Exile 2 leagues the trade site lists today. A compatibility update for the Path of Exile 2 major patch on 11 December 2026 is planned.
 
-★ NEW IN 2.9.53
+★ NEW IN 2.9.54
 
 • First Firefox release, built from the same code as the Chrome and Edge versions
 • The interface lives in the Firefox sidebar; the toolbar button opens and closes it

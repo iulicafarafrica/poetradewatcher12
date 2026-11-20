@@ -1,5 +1,13 @@
 # Poe Trade Watcher — Changelog
 
+## 2.9.54
+
+The store listing says what the extension is for.
+
+### Changed
+- **Name in the manifest**: "Poe Trade Watcher - PoE 1 & 2 Trade Helper" (42 characters). The Chrome Web Store takes the listing title from the manifest, so this is what appears there; Firefox shows it in about:addons while the AMO listing name stays a separate field.
+- **The toolbar title stays short**: "Poe Trade Watcher". The Firefox sidebar header uses that, not the 42-character name, so the panel header does not truncate.
+
 ## 2.9.53
 
 The Firefox package stops carrying code it cannot run, so the AMO validation report is clean.
