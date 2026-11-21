@@ -1,7 +1,7 @@
 # Poe Trade Watcher — release notes
 
 Everything between 2.9.9 and 2.9.50, grouped by area rather than by version.
-Current version: **2.9.55**.
+Current version: **2.9.56**.
 
 ---
 

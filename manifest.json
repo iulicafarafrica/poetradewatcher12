@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Poe Trade Watcher - PoE 1 & 2 Trade Helper",
   "description": "Save Path of Exile 1 and 2 trade items, track prices, build collections, and get Discord or ntfy alerts.",
-  "version": "2.9.55",
+  "version": "2.9.56",
   "author": "Poe Trade Watcher",
   "minimum_chrome_version": "116",
   "permissions": ["storage", "sidePanel", "alarms", "notifications", "unlimitedStorage", "scripting", "offscreen"],

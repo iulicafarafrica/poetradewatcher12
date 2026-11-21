@@ -4955,36 +4955,64 @@ async function repairBookmarkGames() {
   if (changed) await chrome.storage.local.set({ [BOOKMARKS_KEY]: bookmarks });
 }
 
-/* A content script is attached when a page loads, so installing or updating the
-   extension leaves tabs that are already open without the toolbar until they
-   are reloaded by hand. Reload the trade tabs once, on install and on update,
-   instead of asking the user to press F5. Only tabs whose address matches a
-   trade page are touched, and a tab that cannot be reloaded is left alone. */
-async function refreshOpenTradeTabs() {
-  const patterns = ['poe1', 'poe2']
+/* A content script is attached when a page loads, so a trade tab that was open
+   before the extension did has no toolbar, and a tab whose extension context
+   went stale after an update behaves the same. Reloading the page would fix it
+   and throw away the search, so ask the tab whether the script is there and
+   inject it only when it is not: the toolbar appears in place. */
+const CONTENT_SCRIPT_FILES = [
+  'ptc-games.js', 'ptc-poe1.js', 'ptc-poe2.js', 'ptc-settings.js',
+  'item-utils.js', 'ptc-sound.js', 'content.js',
+];
+const CONTENT_PING_TIMEOUT = 800;
+
+function tradeTabPatterns() {
+  return ['poe1', 'poe2']
     .map((game) => globalThis.PTC_GAMES && globalThis.PTC_GAMES.config(game).tabPattern)
     .filter(Boolean);
-  if (!patterns.length) return;
+}
+
+async function ensureContentScripts() {
+  const patterns = tradeTabPatterns();
+  if (!patterns.length) return { ok: true, injected: 0 };
+  let tabs;
   try {
-    const tabs = await chrome.tabs.query({ url: patterns });
-    asArray(tabs).forEach((tab) => {
-      if (!tab || typeof tab.id !== 'number') return;
-      try {
-        const reloading = chrome.tabs.reload(tab.id);
-        if (reloading && typeof reloading.catch === 'function') reloading.catch(() => {});
-      } catch (error) {
-        /* this tab is not ours to reload */
-      }
-    });
+    tabs = await chrome.tabs.query({ url: patterns });
   } catch (error) {
-    /* no host permission, or the tabs API is unavailable */
+    return { ok: false, error: 'No access to the trade tabs.' };
   }
+  let injected = 0;
+  for (const tab of asArray(tabs)) {
+    if (!tab || typeof tab.id !== 'number') continue;
+    let alive = false;
+    try {
+      const reply = await Promise.race([
+        chrome.tabs.sendMessage(tab.id, { type: 'ptc:ping' }),
+        new Promise((resolve) => setTimeout(() => resolve(null), CONTENT_PING_TIMEOUT)),
+      ]);
+      alive = !!(reply && reply.ok);
+    } catch (error) {
+      alive = false;
+    }
+    if (alive) continue;
+    try {
+      if (!chrome.scripting || !chrome.scripting.executeScript) break;
+      await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: CONTENT_SCRIPT_FILES });
+      if (chrome.scripting.insertCSS) {
+        await chrome.scripting.insertCSS({ target: { tabId: tab.id }, files: ['content.css'] });
+      }
+      injected += 1;
+    } catch (error) {
+      /* a page the extension cannot script: about:blank, a PDF, a closed tab */
+    }
+  }
+  return { ok: true, injected };
 }
 
 chrome.runtime.onInstalled.addListener((details) => {
   /* Give the browser a moment to register the content scripts of this version,
-     then reload the trade pages that were already open. */
-  setTimeout(() => { refreshOpenTradeTabs(); }, 1500);
+     then offer the toolbar to the trade pages that were already open. */
+  setTimeout(() => { ensureContentScripts(); }, 1200);
   getSettings().then(async (settings) => {
     /* A fresh install starts with the large cards. onInstalled also fires for
        every update, and small / medium are valid choices, so the migration must
@@ -5132,6 +5160,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       break;
     case 'ptc:trade:url':
       task = handleTradeUrl(message.record || message.payload || message);
+      break;
+    case 'ptc:content:ensure':
+      task = ensureContentScripts();
       break;
     case 'ptc:icons:resume':
       task = resumeIconQueue();

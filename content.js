@@ -1786,7 +1786,12 @@
 
   try {
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-      if (!message || message.type !== 'ptc:watch:check') return;
+      if (!message) return;
+      if (message.type === 'ptc:ping') {
+        sendResponse({ ok: true, page: !!state.page });
+        return false;
+      }
+      if (message.type !== 'ptc:watch:check') return;
       onWatchCheckRequest(message, sendResponse);
       return true;
     });

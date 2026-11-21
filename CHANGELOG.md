@@ -1,5 +1,13 @@
 # Poe Trade Watcher — Changelog
 
+## 2.9.56
+
+The toolbar appears when the panel opens, and the page keeps its search.
+
+### Changed
+- **2.9.55 reloaded the open trade tabs after an install.** A reload throws away the search and only helped at install time, not when the panel was opened later. It is replaced by a non-destructive step: on install, and every time the panel becomes visible, the background asks each trade tab whether its content script is there and injects it only where the answer never comes. The toolbar appears in place; results, filters and scroll position stay.
+- **The content script answers `ptc:ping`**, so a tab that already runs the script is never injected a second time. A tab the extension cannot script (about:blank, a PDF, a closed tab) is skipped.
+
 ## 2.9.55
 
 The toolbar appears without asking for a page reload.

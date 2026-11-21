@@ -3773,6 +3773,19 @@ async function addOpenInTabButton() {
   if (anchor && anchor.parentElement) anchor.parentElement.insertBefore(button, anchor);
 }
 
+/* The toolbar in the trade page comes from a content script, and one that was
+   missing when the page loaded stays missing until the page is reloaded.
+   Opening the panel is the moment the user expects to see it, so ask the
+   background to inject it into the trade tabs that do not answer its ping. It
+   costs one message when the script is already there. */
+function ensurePageWidget() {
+  send('ptc:content:ensure').catch(() => {});
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) ensurePageWidget();
+});
+
 async function init() {
   buildThemeControls();
   bindEvents();
@@ -3786,6 +3799,7 @@ async function init() {
   preloadPrices();
   loadLeagues(false);
   addOpenInTabButton();
+  ensurePageWidget();
 }
 
 init();

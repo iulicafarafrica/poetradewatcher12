@@ -6,7 +6,7 @@
 
 **Save any Path of Exile 1 or 2 trade listing, keep it with every modifier and price, import your Path of Building gear, and get told the moment a price moves.**
 
-![version](https://img.shields.io/badge/version-2.9.55-c9a227?style=flat-square)
+![version](https://img.shields.io/badge/version-2.9.56-c9a227?style=flat-square)
 ![licence](https://img.shields.io/badge/licence-MIT-3fb950?style=flat-square)
 ![manifest](https://img.shields.io/badge/manifest-v3-2f81f7?style=flat-square)
 ![chrome](https://img.shields.io/badge/Chrome-116%2B-4285f4?style=flat-square)
