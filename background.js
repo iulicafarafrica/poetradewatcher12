@@ -4955,7 +4955,36 @@ async function repairBookmarkGames() {
   if (changed) await chrome.storage.local.set({ [BOOKMARKS_KEY]: bookmarks });
 }
 
+/* A content script is attached when a page loads, so installing or updating the
+   extension leaves tabs that are already open without the toolbar until they
+   are reloaded by hand. Reload the trade tabs once, on install and on update,
+   instead of asking the user to press F5. Only tabs whose address matches a
+   trade page are touched, and a tab that cannot be reloaded is left alone. */
+async function refreshOpenTradeTabs() {
+  const patterns = ['poe1', 'poe2']
+    .map((game) => globalThis.PTC_GAMES && globalThis.PTC_GAMES.config(game).tabPattern)
+    .filter(Boolean);
+  if (!patterns.length) return;
+  try {
+    const tabs = await chrome.tabs.query({ url: patterns });
+    asArray(tabs).forEach((tab) => {
+      if (!tab || typeof tab.id !== 'number') return;
+      try {
+        const reloading = chrome.tabs.reload(tab.id);
+        if (reloading && typeof reloading.catch === 'function') reloading.catch(() => {});
+      } catch (error) {
+        /* this tab is not ours to reload */
+      }
+    });
+  } catch (error) {
+    /* no host permission, or the tabs API is unavailable */
+  }
+}
+
 chrome.runtime.onInstalled.addListener((details) => {
+  /* Give the browser a moment to register the content scripts of this version,
+     then reload the trade pages that were already open. */
+  setTimeout(() => { refreshOpenTradeTabs(); }, 1500);
   getSettings().then(async (settings) => {
     /* A fresh install starts with the large cards. onInstalled also fires for
        every update, and small / medium are valid choices, so the migration must

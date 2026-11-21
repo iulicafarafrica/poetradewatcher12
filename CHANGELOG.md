@@ -1,5 +1,12 @@
 # Poe Trade Watcher — Changelog
 
+## 2.9.55
+
+The toolbar appears without asking for a page reload.
+
+### Added
+- **Trade tabs that are already open are reloaded once after an install or an update.** A content script is attached when a page loads, so a trade page that predates the install had no toolbar until the user pressed F5. Tabs are matched by their trade address before anything is reloaded, and a tab that cannot be reloaded is skipped. Both games are covered (`/trade/*` and `/trade2/*`).
+
 ## 2.9.54
 
 The store listing says what the extension is for.
